@@ -128,7 +128,74 @@ print("The result was {r:10.5f} ".format(r=result))
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 #LISTES
+UNe liste peut se changer alors qu'un string est impossible
 
 my_list = [1,2,3]
 print(my_list)
 #= [1, 2, 3] Nous venons de créer une liste
+
+another_list = [4,5,6]
+my_list + another_list
+
+#= my_list = [1,2,3]
+print(my_list)
+#= [1, 2, 3, 4, 5,6] Nous venons de créer une liste
+
+OU
+
+new_list = my_list + another_list
+print(new_list)
+#= [1, 2, 3, 4, 5, 6]
+
+#Changer un élément de la liste
+new_list[0] = "UN"
+print(new_list)
+#=['UN', 2, 3, 4, 5, 6]
+
+#Rajouter un élément à la fin d'une lste
+new_list.append("SEPT")
+print(new_list)
+#=['UN', 2, 3, 4, 5, 6, 'SEPT']
+
+#supprimer le dernier élément de la liste
+new_list.pop()
+print(new_list)
+#=['UN', 2, 3, 4, 5]
+
+#Voir le dernier élément qui va être supprimé
+pop_list = new_list.pop()
+pop_list
+#= 5 car c'est le dernier élément supprimé sauvegardé en tant de liste pop_list
+
+#Enlever un élément en fonction de sa position
+new_list.pop(2)
+#= ['UN', 2, 4] car nous avons supprimé l'élément en troisième position
+
+#Enlever le dernier élément de la liste
+new_list.pop(-1)
+new_list
+#= ['UN', 2]
+
+#Remettre une liste dans l'ordre alphabétique ou croissante
+new_list = ["a","e","x","b","c"]
+number_list = [28,3,18,16]
+new_list.sort()
+number_list.sort()
+print(new_list)
+print(number_list)
+#= ['a', 'b', 'c', 'e', 'x']
+[3, 16, 18, 28]
+
+#Remettre une liste dans l'ordre décroissante croissante
+new_list = ["a","e","x","b","c"]
+number_list = [28,3,18,16]
+new_list.sort()
+number_list.sort()
+new_list.reverse()
+number_list.reverse()
+print(new_list)
+print(number_list)
+#=['x', 'e', 'c', 'b', 'a']
+[28, 18, 16, 3] il faut donc dans un premier temps les mettre dans l'ordre avant de les mettre dans l'autre ordre
+
+
