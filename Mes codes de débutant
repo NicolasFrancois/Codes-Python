@@ -107,6 +107,13 @@ print("The {0} {0} {0}" .format ("fox", "brown" , "quick"))
 print("The {q} {b} {f}" .format (f="fox", b="brown" , q="quick"))
 #= The quick brown fox car nous avons assigné des noms aux variables
 
+name = "Nicolas"
+nom_famille = "François"
+print(f'Son nom est {name} {nom_famille}')
+#= Son nom est Nicolas François avec la fonction f String
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
 #ARRONDIR un résultat
 result = 100 /777
 print("The result was {r} ".format(r=result))
@@ -117,3 +124,11 @@ print("The result was {r:1.3f} ".format(r=result))
 
 print("The result was {r:10.5f} ".format(r=result))
 #= The result was    0.12870 car nous avons mis 10 espace avant d'afficher le résultat et 3 chiffres après la virgule
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#LISTES
+
+my_list = [1,2,3]
+print(my_list)
+#= [1, 2, 3] Nous venons de créer une liste
