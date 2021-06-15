@@ -1,0 +1,119 @@
+#Comment savoir en combien de nombres est divisé un autre utile pour savoir si un nombre est pair ou impair
+7 % 4 
+
+#= 3 car Nous avons pu diviser 1 fois 7 par 4 du coup il reste 3 (7-4 =3)
+
+20 % 7
+
+#=6 car ous avons pu diviser 20 par 7 deux fois et il reste 6 (20-7-7 = 6)
+
+#Pour voir si résultat pair ou impair
+20%2
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#rajouter une ligne ou tabulation dans print()
+print("Hello \n world")
+
+#=Hello 
+ world
+
+print("Hello \t world")
+#= Hello 	 world
+
+#compter le nombre de caractères
+len("Hello world")
+#=11
+
+#INDEXING
+mystring = "Hello World"
+
+mystring[0]
+#=H car c'est la première lettre de la variable
+
+mystring = "Hello World"
+
+mystring[-2]
+#=l car c'est l'avant dernière lettre (-2)
+
+SEQUENCAGE
+
+mystring = "Hello World"
+
+mystring[2:]
+#= 'llo World' car on part de la troisième lettre
+
+mystring[:2]
+#= 'He' car on ne selectionne que les 2 premiers caractères
+
+mystring[3:7]
+#='lo W' car on ne selectionne qu'une partie de la phrase
+
+mystring[::2]
+#='HloWrd' car il commence du début à la fin et saute une lettre sur deux
+
+mystring[2:7:2]
+#='loW' car il commence à partir du troisième caractère et saute tout les deux caractères et exclu à partir du 7ème caractère
+
+mystring[::-1]
+#= 'dlroW olleH' et donc inverse le sens de la variable
+
+"tinker"[1:-2]
+#= "ink" on est pas obligé d'assigner un nom de variable
+
+#Changer les valeurs dans une String
+name = "Sam"
+last_letters = name[1:]
+"P" + last_letters
+ #= "Pam car nous avons gardé les dernières lettres qui nous intéressent dans un nom et ajouté un nouveau caractère
+ 
+ #Mettre tout en majuscule 
+ name = "Sam"
+name.upper()
+#="SAM" mais ne remplace par x qui reste "Sam" pour remplacer
+
+name = "Sam"
+name = name.upper()
+name
+#="SAM"
+
+#mettre tout en minuscule 
+ name = "Sam"
+name.lower()
+#="sam" mais ne remplace par x qui reste "Sam" pour remplacer
+
+name = "Sam"
+name = name.lower()
+name
+#="sam"
+
+#Séparer les mot
+name = "Hello World"
+name.split()
+#=['Hello', 'World'] ok pour séparer en fonction des espaces
+
+name.split("o")
+#= ['Hell', ' W', 'rld'] il a séparer la liste par les o en les excluant mais en incluant les espaces
+
+#INCLURE des mots dans une chaine
+print("The {} {} {}" .format ("fox", "brown" , "quick"))
+#= The fox brown quick car nous n'avons pas précisé l'ordre
+
+print("The {2} {1} {0}" .format ("fox", "brown" , "quick"))
+#= The quick brown fox car nous avons spécifié quel mot mettre dans quel ordre
+
+print("The {0} {0} {0}" .format ("fox", "brown" , "quick"))
+#= The fox fox fox
+
+print("The {q} {b} {f}" .format (f="fox", b="brown" , q="quick"))
+#= The quick brown fox car nous avons assigné des noms aux variables
+
+#ARRONDIR un résultat
+result = 100 /777
+print("The result was {r} ".format(r=result))
+#= The result was 0.1287001287001287
+
+print("The result was {r:1.3f} ".format(r=result))
+#= The result was 0.129  car nous avons un espace d'écart avant d'afficher le résultat et 3 chiffres après la virgule arrondi
+
+print("The result was {r:10.5f} ".format(r=result))
+#= The result was    0.12870 car nous avons mis 10 espace avant d'afficher le résultat et 3 chiffres après la virgule
