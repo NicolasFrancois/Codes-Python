@@ -10,7 +10,15 @@
 #Pour voir si résultat pair ou impair
 20%2
 
+RACINE CARREE
+100 ** 0.5
+
+ELEVER AU CARRE
+100 ** 2
+
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+STRING ordered sequence or caracters
+
 #rajouter une ligne ou tabulation dans print()
 print("Hello \n world")
 
@@ -129,6 +137,7 @@ print("The result was {r:10.5f} ".format(r=result))
 
 #LISTES
 UNe liste peut se changer alors qu'un string est impossible
+Ordered sequencs of object (mutable)
 
 my_list = [1,2,3]
 print(my_list)
@@ -198,4 +207,189 @@ print(number_list)
 #=['x', 'e', 'c', 'b', 'a']
 [28, 18, 16, 3] il faut donc dans un premier temps les mettre dans l'ordre avant de les mettre dans l'autre ordre
 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+DICTIONNAIRES
+Key-value pairing that is unordered
+
+INtérêt du dictionnaires c'est qu'on peut associer aux variables un nom, ce qui facilite les recherche quand on ne connait pas dans quel ordre sont les données
+
+my_dict = {'key 1': 'Value 1' , 'key 2':'Value 2'}
+my_dict
+#= {'key 1': 'Value 1', 'key 2': 'Value 2'}
+
+my_dict['key 1']
+#= 'Value 1'
+
+On peut même ajouter des listes ou des dictionnaires dans un dictionnaire
+d = {'K1' : 123 , 'K2':[1,2,3] , 'K3' : {'insideKey':100}}
+d['K3']['insideKey']
+#= 100
+
+Exemple de combinaise en un seul code pour rendre un C majuscule
+d = {'Key 1' : ['a' , 'b' , 'c']}
+d['Key 1'][2].upper()
+#= C
+
+Rajouter un définition et une valeur à un dictionnaire
+d['Key 2'] = 300
+d
+#= {'Key 1': ['a', 'b', 'c'], 'Key 2': 300}
+
+Remplacer ue valeur dans un dictionnaire
+d['Key 1'] = 'NEW VALUE'
+d
+#= {'Key 1': 'NEW VALUE', 'Key 2': 300}
+
+Voir la liste des nom de champs
+d.keys()
+#=dict_keys(['Key 1', 'Key 2'])
+
+Voir la liste des valeurs
+d.values()
+#=dict_values(['NEW VALUE', 300])
+
+Voir les deux
+d.items()
+#= dict_items([('Key 1', 'NEW VALUE'), ('Key 2', 300)])
+
+#Comment montrer une valeur dans un dictionnaire complexe
+d = {'k1':[{'nest_key':['this is deep',['hello']]}]}
+d['k1'][0]['nest_key'][1][0]
+#= 'hello'
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TUPLES
+Ordered sequencs of object (immutable)
+ne peuvent pas être changés, on dit qu'ils sont immutables, ce qui n'est pas très pratique mais permet d'imperméabiliser les données dans ces tuples 
+et ne pas les changer accidentellement
+
+t = ('a','a','b')
+
+Compter le nombre de fois que a apparaît
+t.count('a')
+#= 2
+
+Chercher où on trouve pour la première fois une variable
+t.index('a')
+#= 0 car on trouve l e premier dans la première place
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+SETS (jeux)
+Ne permet pas d'avoir deux variable identiques
+
+définir un set
+myset = set()
+
+Ajouter une valeur à set
+myset.add(1)
+myset
+#= {1} ressemble à un dictionnaire avec ses {} mais il manque un champ qui le définit
+
+Rajouter une autre valeur à set
+myset.add(2)
+myset
+#={1, 2}
+
+Rajouton encore une fois un 2
+myset.add(2)
+myset
+#={1, 2} ne change pas car il existe déja un 2
+
+Du coup on peut identifier toutes les valeurs différentes d'une liste
+my_list = [1,1,1,1,1,2,2,2,2,3,4]
+my_set = set(my_list)
+my_set
+#= {1, 2, 3, 4}
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+BOOLEENNES
+renvoie True ou False
+
+1>2
+=# False
+
+2>1
+#= True
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+I/O Input
+
+Créer un fichier avec du texte
+%%writefile myfile.txt
+Hello this is a text file
+this is the second line
+this is the third line
+#=Writing myfile.txt
+
+#ouvrir fichier
+open(myfile.txt)
+
+#voir dans quel dossier nous sommes
+pwd
+#='C:\\Users\\nfran'
+
+#Associer un fichier txt à un nom
+myfile = open('myfile.txt')
+myfile.read()
+#= 'Hello this is a text file\nthis is the second line\nthis is the third line\n\nmyfile = open(myfile.txt)\nmyfile.read()\n' avec le codage de la mise à la line 
+et le curseur de lecture est placé à la fin du texte
+
+#pour remettre le curseur au début
+myfile.seek(0)
+myfile.read()
+#= 'Hello this is a text file\nthis is the second line\nthis is the third line\n\nmyfile = open(myfile.txt)\nmyfile.read()\n'
+
+#afficher avec les interlignes
+myfile = open('myfile.txt')
+myfile.readlines()
+#=['Hello this is a text file\n',
+ 'this is the second line\n',
+ 'this is the third line\n',
+ '\n',
+ 'myfile = open(myfile.txt)\n',
+ 'myfile.read()\n']
+ 
+ #ouvrir un fichier situé n'importe où sur ordi
+ myfile = open('C:\\Users\\nfran\\OneDrive\\Bureau\\Texte motiv Francais.txt')
+myfile.readlines()
+#= ['Bonjour,\n',
+ '\n',
+ 'Veuillez trouver ci-joint mon CV matÃ©rialisant ma candidature pour le poste Ã\xa0 pourvoir.\n',
+ '\n',
+ "J'espÃ¨re que mon profil international et atypique saura retenir votre attention et que je pourrai vous prÃ©senter de vive voix mes compÃ©tences et motivations.\n",
+ '\n',
+ 'Cordialement,\n',
+ 'Nicolas FranÃ§ois.'] Ne pas oublier les double \\
+ 
+ #fermer un fichier important car si un autre programme veut l'utiliser ca pourrait générer des conflits
+ myfile.close()
+
+#ouvrir un fichier l'assigner à un nom puis le fermer
+with open('C:\\Users\\nfran\\OneDrive\\Bureau\\Texte motiv Francais.txt') as my_new_file:
+    contents = my_new_file.readlines()  
+contents
+#= ['Bonjour,\n',
+ '\n',
+ 'Veuillez trouver ci-joint mon CV matÃ©rialisant ma candidature pour le poste Ã\xa0 pourvoir.\n',
+ '\n',
+ "J'espÃ¨re que mon profil international et atypique saura retenir votre attention et que je pourrai vous prÃ©senter de vive voix mes compÃ©tences et motivations.\n",
+ '\n',
+ 'Cordialement,\n',
+ 'Nicolas FranÃ§ois.']
+ 
+ #pour rajouter du texte à la fin du fichier
+ with open('my_new_file.txt', mode='a') as f:
+    f.write('\n FOUR ON FOURTH')
+ 
+ #Mode écrire un texte
+ with open('poiudmlfkjmqklsf.txt', mode='w+') as f:
+    f.write('I CREATED THIS FILE!')
+ with open('poiudmlfkjmqklsf.txt', mode='r')as f:
+    print(f.read())
+ #=I CREATED THIS FILE!
+ 
