@@ -393,3 +393,96 @@ contents
     print(f.read())
  #=I CREATED THIS FILE!
  
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+FUNCTIONS
+
+#Intégrer un nom dans une focntion pour qu'il apparaisse
+def greeting(name):
+    print(f'Hello {name}')
+greeting('Jose')
+#=
+
+#intégrer un calcul dans une fonction
+def __add_num__(num1,num2):
+    print(num1 + num2)
+    return num1 + num2
+
+result = __add_num__(10,20)
+result
+#=30
+
+#Dans un dictionnaire identifier quelle est l'association la plus grande
+work_hours = [('Abby',100),('Billy',200),('Cassie',800)]
+
+def __employee_check__(work_hours):
+    current_max = 0
+    employee_of_month = ''
+    for employee,hours in work_hours:
+        if hours > current_max:
+            current_max = hours
+            employee_of_month = employee
+        else:
+            pass
+    return (employee_of_month , current_max)
+
+__employee_check__(work_hours)
+
+name,hours = __employee_check__(work_hours)
+print(name)
+print(hours)
+#=Cassie
+800
+
+#Mixer une liste de chiffre
+example = [1,2,3,4,5,6,7]
+
+def shuffle_list(mylist):
+    shuffle(mylist)
+    return mylist
+result = shuffle_list(example)
+result
+#=[5, 4, 2, 3, 7, 6, 1]
+
+#Le jeu de la boule dans un gobelet
+mylist=['0','','']
+
+def shuffle_list(mylist):
+    shuffle(mylist)
+    return mylist
+mixedup_list = shuffle_list(mylist)
+
+def player_guess():
+    guess = ''
+    while guess not in ['0','1','2']:
+        guess =input("Pick a number 0,1,2")
+    return int(guess)
+guess = player_guess()
+
+def check_guess(mylist,guess):
+    if mylist[guess] == '0':
+        print("Correct!!")
+    else:
+        print("Wrong guess!")
+        print(mylist)
+        
+check_guess(mixedup_list,guess)
+#=Pick a number 0,1,256
+Pick a number 0,1,22
+Wrong guess!
+['0', '', '']
+
+#Utiliser *args et **kwargs pour definir le nombre de variable directement dans la commande
+def myfunc(*args,**kwargs):
+    print(args)
+    print(kwargs)
+    print('I would like {} {}'.format(args[0],kwargs['food']))
+
+myfunc(10,20,30, fruit='orange', food='eggs', animal='dogs')
+#=(10, 20, 30)
+{'fruit': 'orange', 'food': 'eggs', 'animal': 'dogs'}
+I would like 10 eggs
+
+def add_num(num1,num2):
+    return num1+num2
+Hello Jose
