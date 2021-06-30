@@ -1028,6 +1028,7 @@ while True:
     # Reset the board
     theBoard = [' '] * 10
     player1_marker, player2_marker = player_input()
+    #car on a dit dans la fonction player_input() return ('X', 'O') du coup on assigne le X à au player1 et le O au player 2
     turn = choose_first()
     print(turn + ' will go first.')
     
