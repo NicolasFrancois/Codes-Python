@@ -1081,3 +1081,16 @@ while True:
     if not replay():
         break
  
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+Créer une fonction somme des composants d'une liste et sa moyenne
+
+def somme(ratings_no_zero):
+    _somme = 0
+    for i in ratings_no_zero:
+        _somme = _somme + i
+    return _somme
+
+
+def moyenne(ratings_no_zero):
+    return somme(ratings_no_zero)/len(ratings_no_zero)
