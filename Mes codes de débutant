@@ -139,6 +139,17 @@ print("The result was {r:10.5f} ".format(r=result))
 UNe liste peut se changer alors qu'un string est impossible
 Ordered sequencs of object (mutable)
 
+une_liste = [1, 3, 102, 32, 11, -12, 33]
+x = 14
+
+# Est-ce que la valeur de x fait partie des valeurs de une_liste ?
+print(x in une_liste)
+>>> False
+
+# Est-ce que la valeur de x ne fait PAS partie des valeurs de une_liste ?
+print(x not in une_liste)
+>>> True
+
 my_list = [1,2,3]
 print(my_list)
 #= [1, 2, 3] Nous venons de créer une liste
@@ -165,6 +176,30 @@ print(new_list)
 new_list.append("SEPT")
 print(new_list)
 #=['UN', 2, 3, 4, 5, 6, 'SEPT']
+
+#Allonger de +1 une liste
+x = x + 1
+une_liste.append(x)
+
+### Fusion de 2 listes avec la méthode extend
+
+liste_1 = ["Bonjour", "comment", "ça", "va", "?"]
+liste_2 = ["Bien", "et", "toi", "?"]
+
+# Ajout des éléments de liste_2 à la fin de liste_1
+liste_1.extend(liste_2)
+
+# Affichage de liste_1
+print(liste_1)
+
+### Fusion de 2 listes avec l'opérateur +
+
+liste_1 = ["Bonjour", "comment", "ça", "va", "?"]
+liste_2 = ["Bien", "et", "toi", "?"]
+
+# Ajout des éléments de liste_2 à la fin de liste_1
+liste_1 = liste_1 + liste_2
+print(liste_1)
 
 #supprimer le dernier élément de la liste
 new_list.pop()
@@ -218,6 +253,14 @@ my_dict = {'key 1': 'Value 1' , 'key 2':'Value 2'}
 my_dict
 #= {'key 1': 'Value 1', 'key 2': 'Value 2'}
 
+# Création du dictionnaire
+carte_id = {"prenom":"paul", "nom":"lefebvre", "emission":1978}
+print(carte_id)
+
+# Mis à jour d'un champ du dictionnaire
+carte_id["prenom"] = "guillaume"
+print(carte_id)
+
 my_dict['key 1']
 #= 'Value 1'
 
@@ -264,6 +307,16 @@ TUPLES
 Ordered sequencs of object (immutable)
 ne peuvent pas être changés, on dit qu'ils sont immutables, ce qui n'est pas très pratique mais permet d'imperméabiliser les données dans ces tuples 
 et ne pas les changer accidentellement
+
+un_tuple = "Bonjour", -1, 133
+print(un_tuple)
+
+# Tuple assignment
+x, y, z = un_tuple
+
+print(x)
+print(y)
+print(z)
 
 t = ('a','a','b')
 
@@ -1094,3 +1147,197 @@ def somme(ratings_no_zero):
 
 def moyenne(ratings_no_zero):
     return somme(ratings_no_zero)/len(ratings_no_zero)
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+CLASSES
+
+Voir les attributs des classes
+
+dir(MyInstance)
+['MyVar',
+ '__class__',
+ '__delattr__',
+ '__dict__',
+ '__dir__',
+ '__doc__',
+ '__eq__',
+ '__format__',
+ '__ge__',
+ '__getattribute__',
+ '__gt__',
+ '__hash__',
+ '__init__',
+ '__init_subclass__',
+ '__le__',
+ '__lt__',
+ '__module__',
+ '__ne__',
+ '__new__',
+ '__reduce__',
+ '__reduce_ex__',
+ '__repr__',
+ '__setattr__',
+ '__sizeof__',
+ '__str__',
+ '__subclasshook__',
+ '__weakref__']
+
+
+Travailler avec des constructeurs -> Création d'uns instance:
+class MyClass:
+    def SayHello(self):
+        print('Bonjour tout le monde')
+MyInstance = MyClass()
+MyInstance.SayHello()
+# Bonjour tout le monde
+
+AVEC CREATION ENFANT/PARENT
+class Animal:
+    def __init__(self, Name='', Age =0, Type = ''):
+        self.Name = Name
+        self.Age = Age
+        self.Type = Type
+        
+    def GetName(self):
+        return self.Name
+    
+    def SetName(self, Name):
+        self.Name = Name
+        
+    def GetAge(self):
+        return self.Age
+    
+    def SetAge(self, Age):
+        self.Age = Age
+        
+    def GetType(self):
+        return self.Type
+    
+    def SetType(self, Type):
+        self.Type = Type
+        
+    def __str__(self):
+        return '{0} est un {1} âgé de {2} ans.'.format(self.Name, self.Type, self.Age)
+    
+class Chicken(Animal):
+    def __init__(self, Name='', Age=0):
+        self.Name = Name
+        self.Age = Age
+        self.Type = "poulet"
+        
+    def SetType(self,Type):
+        print("Désolé, {0} sera toujours un {1}.".format(self.Name, self.Type))
+        
+    def MakeSound(self):
+        print('{0} dit Cot, Cot, Cot, Codette !'.format(self.Name))
+        
+MyChicken = Animal('Arthur', 2, 'Poulet')
+print(MyChicken)
+MyChicken.SetAge(MyChicken.GetAge()+ 1)
+print(MyChicken)
+MyChicken.SetType('Gorille')
+print(MyChicken)
+Chicken.MakeSound()
+class MyClass:
+    Greeting =''
+    def __init__(self, Name = 'le monde'):
+        self.Greeting = Name + '!'
+    def SayHello(self):
+        print('Bonjour {0} '.format(self.Greeting))
+
+MyInstance = MyClass()
+MyInstance.SayHello()
+# Bonjour le monde!
+
+MyInstance = MyClass('Pierre')
+MyInstance.SayHello()
+# Bonjour Pierre!
+
+UNE ADDTION AVEC TECHNIQUE DES CLASSES
+class MyClass:
+    def DoAdd(self, Value1=0, Value2=0):
+        Sum = Value1 + Value2
+        print("La somme de {0} plus {1} est {2}.".format(Value1, Value2, Sum))
+        
+MyInstance = MyClass()
+MyInstance.DoAdd(1,4)
+# La somme de 1 plus 4 est 5.
+
+LISTE D'ARGUMENTS VARIABLES
+class MyClass:
+    def PrintList1(*args):
+        for Count, Item in enumerate(args):
+            print('{0}. {1}'.format(Count, Item))
+    def PrintList2(**kwargs):
+        for Name, Value in kwargs.items():
+            print('{0} aime le {1}.'.format(Name, Value))
+            
+MyClass.PrintList1("Rouge", "Bleu", "Vert")
+MyClass.PrintList2(Georges="Rouge", Annie='Bleu',Sarah="Vert")
+# 0. Rouge
+1. Bleu
+2. Vert
+Georges aime le Rouge.
+Annie aime le Bleu.
+Sarah aime le Vert.
+
+SURCHARGER LES OPERATEURS
+class MyClass:
+    def __init__(self,*args):
+        self.Input = args
+    def __add__(self, Other):
+        Output = MyClass()
+        Output.Input = self.Input + Other.Input
+        return Output
+    def __str__(self):
+        Output = ''
+        for Item in self.Input:
+            Output += Item
+            Output += ''
+        return Output
+    
+Value1 = MyClass('Rouge ', 'Vert ', 'Bleu ')
+Value2 = MyClass('Jaune ', 'Pourpre ', 'Cyan ')
+Value3 = Value1 + Value2
+
+print('{0} + {1} = {2}'.format(Value1, Value2, Value3))
+
+#Rouge Vert Bleu  + Jaune Pourpre Cyan  = Rouge Vert Bleu Jaune Pourpre Cyan
+
+CREER UNE CLASSE AVEC GETTER ET SETTER
+class MyClass:
+    def __init__(self, Name='Samuel', Age=32):
+        self.Name = Name
+        self.Age = Age
+    
+    def GetName(self):
+        return self.Name
+    
+    def SetName(self, Name):
+        self.Name = Name
+        
+    def GetAge(self):
+        return self.Age
+    
+    def SetAge(self, Age):
+        self.Age = Age
+        
+    def __str__(self):
+        return '{0} est agé(e) de {1} ans.'.format(self.Name,self.Age)
+ SamuelRecord = MyClass()
+AnnieRecord = MyClass('Annie',44)
+
+print(SamuelRecord.GetAge())
+SamuelRecord.SetAge(33)
+
+print(AnnieRecord.GetName())
+AnnieRecord.SetName('Sophie')
+
+print(SamuelRecord)
+print(AnnieRecord)
+
+#32
+Annie
+Samuel est agé(e) de 33 ans.
+Sophie est agé(e) de 44 ans.
