@@ -242,6 +242,27 @@ print(number_list)
 #=['x', 'e', 'c', 'b', 'a']
 [28, 18, 16, 3] il faut donc dans un premier temps les mettre dans l'ordre avant de les mettre dans l'autre ordre
 
+CREER UNE LISTE A PARTIR D'UNE AUTRE LISTE EN REPRENNANT QU'UNE PARTIE DE LA LISTE
+ratings = []
+
+for i in ratings_player[1190418]:
+    ratings.append(float(i[1]))
+
+print(ratings)
+
+CHERCHER LA VALEUR LA PLUS GRANDE ET L'AFFICHER
+#Initialiser deux variables maximum_index et maximum à 0
+
+maximum_index = 0 
+maximum = 0
+
+#Parcourir la liste ratings à l'aide de enumerate en actualisant maximum_index et maximum.
+for i, j in enumerate(ratings) : 
+    if j > maximum :
+        maximum = j #donne la note la plus élevée
+        maximum_index = i #donne le nom dont la note est plus élevée
+
+print('Le meilleur joueur était :', ratings_player[1190418][maximum_index][0])
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 DICTIONNAIRES
