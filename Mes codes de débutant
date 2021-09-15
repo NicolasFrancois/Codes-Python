@@ -263,6 +263,40 @@ for i, j in enumerate(ratings) :
         maximum_index = i #donne le nom dont la note est plus élevée
 
 print('Le meilleur joueur était :', ratings_player[1190418][maximum_index][0])
+
+#COMPTER LE NOMBRE DE FOIS OU UNE VALEUR CORRESPOND A UNE AUTRE
+results = [9.81, 9.89, 9.91, 9.93, 9.94, 9.95, 9.96, 9.97, 9.98, 10.03, 10.04, 10.05, 10.06, 10.08, 10.11, 10.23]
+
+# La variable i va compter le nombre d'athlètes qui ont
+# effectué un temps inférieur à 10 secondes
+i = 0
+
+# Tant que le temps effectué par l'athlète à l'indice i est inférieur à 10 sec
+while results[i] < 10:
+    # On incrémente i
+    i += 1
+
+print("Le nombre d'athlètes ayant eu un temps inférieur à 10s est de", i)
+
+#CHANGER LES DONNEES DANS UNE LISTE
+good_marks = []
+
+for note in bad_marks:
+    good_marks.append(note+4)
+    
+print(good_marks)
+
+#STOCKER ET RANGER UNE SUITE DE NOMBRESEN LES ADDICIONANT
+# Les deux premiers termes de la suite de Fibonacci
+u = [0, 1]
+
+# Pour i allant de 2 à 100
+for i in range(2, 100): 
+    # On calcule le terme u_i à l'aide de u[i-1] et u[i-2]
+    u_i = u[i-1] + u[i-2]
+    
+    # On stock u_i à la fin de la liste u
+    u.append(u_i) 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 DICTIONNAIRES
