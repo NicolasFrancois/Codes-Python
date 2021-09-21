@@ -8,7 +8,7 @@
 #=6 car ous avons pu diviser 20 par 7 deux fois et il reste 6 (20-7-7 = 6)
 
 #Pour voir si résultat pair ou impair
-20%2
+20%2F
 
 RACINE CARREE
 100 ** 0.5
@@ -367,6 +367,16 @@ d = {'k1':[{'nest_key':['this is deep',['hello']]}]}
 d['k1'][0]['nest_key'][1][0]
 #= 'hello'
 
+
+#TROUVER LA VALEUR LA PLUS HAUTE DANS UN DICTIONNAIRE
+maximum = 0
+
+for i in team_possession.keys():
+    if float(team_possession[i][1]) > maximum:
+        maximum = float(team_possession[i][1])
+        team = team_possession[i][0]
+        
+print(team)
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 TUPLES
