@@ -1481,3 +1481,68 @@ arrondi = np.round(resultat, decimals = 2)
 
 # Affichage des 10 premiers éléments du résultat arrondi
 print(arrondi[:10])
+
+
+#ndexer les éléments d'un array à l'aide d'une condition
+
+# Création d'un array de dimension 3x3
+X = np.array([[-1, 0, 30],
+              [-2, 3, -5],
+              [5, -5, 10]])
+
+# On assigne à tous les éléments négatifs la valeur 0
+X[X<0] = 0
+
+# Affichage de la matrice modifiée
+print(X)
+>>> [[ 0  0 30]
+>>>  [ 0  3  0]
+>>>  [ 5  0 10]]
+
+#indexer un array à l'aide d'une condition évaluée sur un autre array :
+
+
+# Création de 2 arrays à 8 éléments
+X = np.array([3, -7, -10, 3, 6, 5, 2, 9])
+
+y = np.array([0, 1, 1, 1, 0, 1, 0, 0])
+
+# On assigne la valeur -1 aux éléments de X pour lesquels la valeur de y à l'indice correspondant vaut 1
+X[y == 1] = -1
+
+# Affichage de X
+print(X)
+>>> [3 -1 -1 -1 6 -1 2 9]
+
+# Affichage des éléments de X pour lesquels la valeur de y à l'indice correspondant vaut 0
+print(X[y == 0])
+>>> [3 6 2 9]
+
+#Visualier le shape d'un array
+print(img.shape)
+
+#TRANSFORMER UNE IMAGE COULEUR EN NOIR ET BLANC
+def rgb_to_gray(X):
+    nb_lignes, nb_colones, nb_canaux = X.shape
+    
+    
+    # Création d'un array de zéros avec le même nombre de lignes et colonnes que X
+    # mais avec 1 seul canal
+    X_gray = np.zeros(shape = (nb_lignes, nb_colones, 1))
+    
+    # Itération sur les lignes de l'image
+    for i, lignes in enumerate(X):
+        # Itération sur les pixels de la ligne
+        for j, pixel in enumerate(lignes):
+            # Calcul de la moyenne des intensités des canaux
+            moyenne = 0
+            for canal in pixel:
+                moyenne += canal
+            moyenne /= 3
+            
+            # On stocke la moyenne des intensités dans X_gray
+            X_gray[i,j] = moyenne
+    return X_gray
+
+# Test
+_  = rgb_to_gray(img)
