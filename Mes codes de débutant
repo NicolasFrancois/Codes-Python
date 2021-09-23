@@ -1546,3 +1546,109 @@ def rgb_to_gray(X):
 
 # Test
 _  = rgb_to_gray(img)
+
+## REDIMENSIONNER UN ARRAY / RESHAPING
+
+# Création d'un array à partir d'une liste à 10 éléments
+X = np.array([i for i in range(1, 11)])   # 1, 2, ..., 10
+
+# Affichage des dimensions de X
+print(X.shape)
+>>> (10,)
+
+# Affichage de X
+print(X)
+>>> [1  2  3  4  5  6  7  8  9 10]
+
+# Reshaping de l'array en une matrice à 2 lignes et 5 colonnes
+X_reshaped = X.reshape((2, 5))
+
+# Affichage du nouvel array
+print(X_reshaped)
+>>> [[ 1  2  3  4  5]
+>>>  [ 6  7  8  9 10]]
+
+## FUSION D'ARRAYS
+Il est parfois nécessaire de fusionner plusieurs arrays pour former un jeu de données.
+Pour cela, nous pouvons utiliser la fonction np.concatenate :
+
+# Création de deux arrays de 3 lignes et 2 colonnes
+# Le premier est rempli de 1
+X_1 = np.ones(shape = (3, 2))
+print(X_1)
+>>> [[1. 1.]
+>>>  [1. 1.]
+>>>  [1. 1.]]
+
+# Le deuxième est rempli de 0
+X_2 = np.zeros(shape = (3, 2))
+print(X_2)
+>>> [[0. 0.]
+>>>  [0. 0.]
+>>>  [0. 0.]]
+
+# Concaténation des deux arrays sur l'axe des lignes
+X_3 = np.concatenate([X_1, X_2], axis = 0)
+print(X_3)
+>>> [[1. 1.]
+>>>  [1. 1.]
+>>>  [1. 1.]
+>>>  [0. 0.]
+>>>  [0. 0.]
+>>>  [0. 0.]]
+
+# Concaténation des deux arrays sur l'axe des colonnes
+X_4 = np.concatenate([X_1, X_2], axis = 1)
+print(X_4)
+>>> [[1. 1. 0. 0.]
+>>>  [1. 1. 0. 0.]
+>>>  [1. 1. 0. 0.]]
+
+## Création de deux arrays à 2 valeurs
+a = np.array([4, 10]) 
+b = np.array([6, 7])   
+
+## Multiplication entre deux arrays
+print(a * b)
+>>> [24 70]
+
+## CALCUL DES MOYENNES DES ARRAYS
+# Calcul de la moyenne sur TOUTES les valeurs de X
+print(A.mean())
+>>> 3.67
+
+# Calcul de la moyenne sur les COLONNES de X
+print(A.mean(axis = 0))
+>>> [2. 3. 6.]
+
+# Calcul de la moyenne sur les LIGNES de X
+print(A.mean(axis = 1))
+>>> [4. 3.33]
+Il existe d'autres méthodes statistiques qui se comportent comme la méthode mean, telles que:
+
+sum: Calcule la somme des éléments d'un array.
+std: Calcule de l'écart type.
+min: Trouve la valeur minimale parmis les éléments d'un array.
+max: Trouve la valeur maximale parmis les éléments d'un array.
+argmin: Renvoie l'indice de la valeur minimale.
+argmax: Renvoie l'indice de la valeur maximale.
+
+## MULTIPLIER DEUX COLONNES D'UN ARRAY
+ca = (tab[:,0]*tab[:,1]).sum()
+print(ca)
+
+## retourner les éléments uniques triés d'un tableau :
+
+A = np.array(['A','A','B','B','C'])
+
+print(np.unique(A))
+>>> array(['A', 'B', 'C'], dtype='<U1')
+
+#Vérifier que chaque valeur soit unique dans un array
+def value_counts(my_array):
+    values, counts = np.unique(my_array, return_counts = True)
+    return values, counts
+
+values, counts = value_counts(items)
+print(values)
+print(counts)
