@@ -1656,3 +1656,37 @@ print(counts)
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 DATAFRAME
+
+# Création d'un array NumPy 
+array = np.array([[1, 2, 3, 4], 
+                  [5, 6, 7, 8], 
+                  [9, 10, 11, 12]])
+
+# Instanciation d'un DataFrame 
+df = pd.DataFrame(data = array,                 # Les données à mettre en forme
+                  index = ['i_1', 'i_2', 'i_3'],  # Les indices de chaque entrée
+                  columns = ['A', 'B', 'C', 'D']) # Le nom des colonnes
+Ceci produit le DataFramesuivant :
+A	B	C	D
+i_1	1	2	3	4
+i_2	5	6	7	8
+i_3	9	10	11	12
+
+# Création d'un dictionnaire
+dictionnaire = {'A': [1, 5, 9], 
+                'B': [2, 6, 10],
+                'C': [3, 7, 11],
+                'D': [4, 8, 12]}
+
+# Instanciation d'un DataFrame 
+df = pd.DataFrame(data = dictionnaire,
+                  index = ['i_1', 'i_2', 'i_3'])
+Ceci produit le même DataFrame que précédemment :
+A	B	C	D
+i_1	1	2	3	4
+i_2	5	6	7	8
+i_3	9	10	11	12
+
+
+
+
