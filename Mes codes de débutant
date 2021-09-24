@@ -1687,6 +1687,54 @@ i_1	1	2	3	4
 i_2	5	6	7	8
 i_3	9	10	11	12
 
+##IMPORTER UN FICHIER CSV
 
+pd.read_csv(filepath_or_buffer , sep = ',', header = 0, index_col = 0 ... )
 
+Les arguments essentiels de la fonction pd.read_csv à connaître sont :
 
+filepath_or_buffer : Le chemin d'accès du fichier .csv relativement à l'environnement d'exécution. Si le fichier se trouve dans le même dossier que l'environnement Python, il suffit de renseigner le nom du fichier. Ce chemin doit être renseigné sous forme de chaîne de caractères.
+sep : Le caractère utilisé dans le fichier .csv pour séparer les différentes colonnes. Cet argument doit être spécifié sous forme de caractère.
+header : Le numéro de la ligne qui contient les noms des colonnes. Si par exemple les noms de colonnes sont renseignés dans la première ligne du fichier .csv, alors il faut spécifier header = 0. Si les noms ne sont pas renseignés, on mettra header = None.
+index_col : Le nom ou numéro de la colonne contenant les indices de la base de données. Si les entrées de la base sont indexées par la première colonne, il faudra renseigner index_col = 0. Alternativement, si les entrées sont indexées par une colonne qui porte le nom "Id", on pourra spécifier index_col = "Id".
+
+# Affichage des 10 premières lignes d'un DataFrame mon_dataframe
+mon_dataframe.head(10)
+
+#Affichage des 10 dernieres lignes 
+transactions.tail(10)
+
+# Affichage de la colonne 'cust_id' 
+print(transactions['cust_id'])
+
+# Extraction des colonnes 'cust_id' et 'Qty' de transactions
+cust_id_qty = transactions[["cust_id","Qty"]]
+
+# Extraction des variables catégorielles
+cat_var_names = ['cust_id', 'tran_date', 'prod_subcat_code', 'prod_cat_code', 'Store_type']
+cat_vars = transactions[cat_var_names]
+
+# Extraction des variables quantitatives
+num_var_names = ['Qty', 'Rate', 'Tax','total_amt']
+num_vars = transactions[num_var_names]
+
+# Affichage des 5 premières lignes de chaque DataFrame
+print("Variables catégorielles: \n")
+print(cat_vars.head(), "\n \n")
+
+print("Variables quantitatives: \n")
+print(num_vars.head())
+
+# On récupère la ligne d'indice 80712190438 du DataFrame num_vars
+print(num_vars.loc[80712190438])
+
+# On extrait les colonnes 'Tax' et 'total_amt' des lignes d'indices 80712190438 et 29258453508
+transactions.loc[[80712190438, 29258453508], ['Tax', 'total_amt']]
+
+# Extraction des 4 premières lignes et des 3 premières colonnes de transactions SLICING
+transactions.iloc[0:4, 0:3]
+
+# On séléctionne les lignes du DataFrame df pour lesquelles la colonne 'col 2' vaut 3. 
+df[df['col 2'] == 3]
+
+df.loc[df['col 2'] == 3]
