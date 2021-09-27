@@ -1748,3 +1748,51 @@ Pour analyser les variables catégorielles, il est préférable de commencer par
 # Quelle est la moyenne du montant des transactions dont le montant est positif 
 
 transactions[transactions['total_amt']  > 0].describe()
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+NETTOYAGE DES DONNEES
+
+##COMPTER LE NOMBRE DE DOUBLONS
+print(df.duplicated().sum())
+
+## REMPLACEMENT DES DOUBLONS
+La méthode d'un DataFrame permettant de supprimer les doublons est drop_duplicates.
+Son en-tête est la suivante :
+
+drop_duplicates(subset, keep, inplace)
+
+Le paramètre subset indique la ou les colonnes à considérer pour identifier et supprimer les doublons. Par défaut, subset = None : on considère toutes les colonnes du DataFrame.
+Le paramètre keep indique quelle entrée doit être gardée :
+'first' : On garde la première occurence.
+'last' : On garde la dernière occurence.
+'False' : On ne garde aucune des occurences.
+Par défaut, keep = 'first'.
+Le paramètre inplace (très courant dans les méthodes de la classe DataFrame), précise si l'on modifie directement le DataFrame (dans ce cas inplace=True) ou si la méthode renvoie une copie du DataFrame (inplace=False). Une méthode appliquée avec l'argument inplace = True est irréversible. Par défaut, inplace = False.
+
+## AFFICHER afficher la transaction la plus récente pour chaque catégorie de prod_cat_code
+
+print(transactions_clean.drop_duplicates(subset = 'prod_cat_code', keep = 'first'))
+
+# Création du dictionnaire associant les anciens noms aux nouveaux noms de colonnes
+dictionnaire = {'ancien_nom1': 'nouveau_nom1',
+                'ancien_nom2': 'nouveau_nom2'}
+
+# On renomme les variables grâce à la méthode rename
+df = df.rename(dictionnaire, axis = 1)
+
+## CHANGER LE NOM DESCOLONNES D'UN DATAFRAME
+
+new_types = {'Store_type'       : 'int',
+             'prod_subcat_code' : 'int'}
+
+transactions = transactions.astype(new_types)
+
+## CHANGER LE TYPE DES DONNES D'UN DATAFRAME
+# Méthode 1 : Création d'un dictionnaire puis appel à la méthode astype du DataFrame
+dictionnaire = {'col_1': 'int',
+                'col_2': 'float'}
+df = df.astype(dictionnaire)
+
+# Méthode 2 : Séléction de la colonne puis appel à la méthode astype d'une Series
+df['col_1'] = df['col_1'].astype('int')
