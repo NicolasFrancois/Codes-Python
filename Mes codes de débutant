@@ -1898,3 +1898,10 @@ transactions[transactions[['rate', 'tax', 'total_amt']].isna().any(axis = 1)].he
 
 # Les trois variables sont toujours manquantes ensembles.
 
+## SEPARER UN DATAFRAME PAR COLONNES EN 2 PUIS LE RECONSTITUER
+# Séparation du DataFrame transactions
+part_1 = transactions[transactions.columns[:4]]
+part_2 = transactions[transactions.columns[4:]]
+
+# Reconstitution du DataFrame transactions par concaténation
+union = pd.concat([part_1,part_2], axis = 1)
