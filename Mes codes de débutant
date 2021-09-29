@@ -2070,3 +2070,38 @@ functions_to_apply = {
     }
 
 df.groupby('column_to_group_by').agg(functions_to_apply)
+
+-----------------
+
+import numpy as np
+
+transactions= transactions.replace(to_replace=['e-Shop', 'TeleShop', 'MBR', 'Flagship store',  np.nan],value= [1, 2, 3, 4, 0])
+
+
+def get_nb_month(month):
+    
+    # Découpage de la chaîne sur le caractère '-month'
+    decoupage = month.split('-month')
+    
+    # On renvoie le premier élément du découpage (nb de mois)
+    nb_month = decoupage[0]
+    return nb_month
+    
+# Application des fonctions
+duration = df['duration'].apply(get_nb_month)
+
+
+# Affectation des nouvelles valeurs
+transactions['duration'] = duration
+
+    
+ # Nombre de NANs par colonne
+colonnes_nbna = transactions.isna().sum(axis = 0)
+
+print("La colonne contenant le plus de NANs est:", colonnes_nbna.idxmax())
+
+FILTRER UN DF EN FONCTION DE 2 occurence en même temps &
+df[(df['annee'] == 1979) & (df['surface'] > 60)]
+
+FILTRER UN DF EN FONCTION DE 2 occurence en même temps ou
+print(df[(df['année'] >1900) |(df['quartier'] == 'Père-Lachaise')])
