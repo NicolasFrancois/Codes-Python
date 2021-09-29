@@ -512,7 +512,8 @@ contents
  'Nicolas FranÃ§ois.']
  
  #pour rajouter du texte à la fin du fichier
- with open('my_new_file.txt', mode='a') as f:
+ with open('my_new_file.txt', 
+ ='a') as f:
     f.write('\n FOUR ON FOURTH')
  
  #Mode écrire un texte
@@ -1653,6 +1654,11 @@ values, counts = value_counts(items)
 print(values)
 print(counts)
 
+##FUSIONNER LES DONNEES DE TABLEAUX DIFFERENTS
+tab = np.array([quantities, unit_price]).T
+
+Ne montrer qeu certaines partie de tableau en fonctino d'un donnée
+print(tab[(tab[:,1]>=10)&(tab[:,1]<=50)])
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 DATAFRAME
@@ -1899,7 +1905,7 @@ print("La colonne contenant le plus de NANs est:", colonnes_nbna.idxmax())
 # Affichage des 10 premières entrées contenant au moins un NAN dans 'rate', 'tax' ou 'total_amt'
 transactions[transactions[['rate', 'tax', 'total_amt']].isna().any(axis = 1)].head(10)
 
-# Les trois variables sont toujours manquantes ensembles.
+# Les troiss sont toujours manquantes ensembles.
 
 ## SEPARER UN DATAFRAME PAR COLONNES EN 2 PUIS LE RECONSTITUER
 # Séparation du DataFrame transactions
