@@ -2072,10 +2072,14 @@ functions_to_apply = {
 df.groupby('column_to_group_by').agg(functions_to_apply)
 
 -----------------
-
+import pandas as pd
 import numpy as np
 
-transactions= transactions.replace(to_replace=['e-Shop', 'TeleShop', 'MBR', 'Flagship store',  np.nan],value= [1, 2, 3, 4, 0])
+df = pd.read_csv("transactions.csv", sep =',', index_col = "transaction_id")
+ou
+df = pd.read_csv("crowdfunding.csv", index_col = 0) si il n'y a pas de séparateur
+
+df['category']= df['category'].replace(to_replace=['Poetry', 'Narrative Film', 'Music', 'Film & Video',  np.nan],value= [1, 2, 3, 4, 0])
 
 
 def get_nb_month(month):
@@ -2105,3 +2109,9 @@ df[(df['annee'] == 1979) & (df['surface'] > 60)]
 
 FILTRER UN DF EN FONCTION DE 2 occurence en même temps ou
 print(df[(df['année'] >1900) |(df['quartier'] == 'Père-Lachaise')])
+
+AVOIR LE NOMBRE DE VARIABLE ET LEUR NOMS
+df['category'].value_counts()
+
+SAVOIR LE NB ET QUELLES COLONNES ONT DES NA
+colonnes_nbna = df.isna().sum(axis = 0)
