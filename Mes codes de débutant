@@ -1740,7 +1740,7 @@ transactions.loc[[80712190438, 29258453508], ['Tax', 'total_amt']]
 # Extraction des 4 premières lignes et des 3 premières colonnes de transactions SLICING
 transactions.iloc[0:4, 0:3]
 
-# On séléctionne les lignes du DataFrame df pour lesquelles la colonne 'col 2' vaut 3. 
+# On séléctionne les lignes du DataFrame df pour lesquelles la colonne 'col 2' vaut 3 // UTILISATION .iloc
 df[df['col 2'] == 3]
 
 df.loc[df['col 2'] == 3]
@@ -1750,6 +1750,10 @@ La méthode describe d'un DataFrame retourne un résumé des statistiques descri
 C'est donc un outil très utile pour une première visualisation du type et de la distribution ce ces variables.
 
 Pour analyser les variables catégorielles, il est préférable de commencer par utiliser la méthode value_counts qui renvoie le nombre d'occurrences pour chaque modalité de ces variables. La méthode value_counts ne peut pas s'utiliser directement sur un DataFrame mais que sur les colonnes du DataFrame qui sont des objets de la classe pd.Series.
+
+##Afficher et compter les modalités de la variable
+data['main_category'].value_counts()# juste compter
+data['main_category'].value_counts(normalize=True) #afficher %
 
 # Quelle est la moyenne du montant des transactions dont le montant est positif 
 
@@ -1998,6 +2002,11 @@ functions_to_apply = {
     'qty' : [max_qty, min_qty, median_qty]
 }
 
+## Rajouter des colonnes avec des données statistiques
+stats['min'] = num_data.min()
+stats['max'] = num_data.max()
+stats['min_max_diff'] = stats['max'] - stats['min']
+
 # Operation groupby
 qty_groupby = transactions.groupby('cust_id').agg(functions_to_apply)
 
@@ -2080,10 +2089,47 @@ data.select_dtypes(include=['int64','float64'])
 ## Determiner Quantiles d'une colonne
 num_data['goal'].quantile(q = [0.25,0.5,0.75])
 
+## Découper une variable en catégorie en fonction des quantiles et stocker les catégories dans une nouvelle colonne
+data['goal_classes'] = pd.qcut(data['goal'], labels=[0, 1, 2, 3], q=4)
+
+## Découper une variable en catégorie en fonction d'une intervalle non constante
+cut_labels_4 = ['silver', 'gold', 'platinum', 'diamond']
+cut_bins = [0, 10000, 50000, 100000, 10000000000]
+data['goal_medal'] = pd.cut(data['goal'], bins=cut_bins, labels=cut_labels_4)
+
+## Découper une variable en catégorie en fonction d'une intervalle constante
+interval_range = pd.interval_range(start=0, freq=10000, end=200000)
+df['cut_ex2'] = pd.cut(df['ext price'], bins=interval_range, labels=[1,2,3])
+
+
 ##AFFECTER LES QUANTILES DANS DE NOUVELLES COLONNES
 stats[['q1', 'q2', 'q3']] = num_data.quantile(q=[0.25, 0.5, 0.75]).transpose()
 
+## CALCUL DE VARIANCE ET ECART TYPE ET  l'intervalle moyenne +/- ecart type de la variable backers dont intervalle contenant la plupart des données
 
+ecart_type = num_data['backers'].std() --> écart moyens par rapport à la moyenne
+intervalle = [num_data['backers'].mean() - ecart_type, num_data['backers'].mean() + ecart_type]
+print(intervalle)
+
+-> Création d'une colonne indiquant si la ligne fait partie de cette intervalle 1 oui 0 non
+num_data['backers_in'] = num_data['backers'].between(intervalle[0],intervalle[1]).astype(int)
+
+num_data.head()
+
+##Stocker dans un tableau les données en fonction de leur type. ('int64','float64' pour les chiffres, 
+num_data= data.select_dtypes(include=['int64','float64']) # pour les données chiffres
+cat_data=data.select_dtypes(include='O') # pour le texte
+
+DATA TEXTE CATEGORIELLE
+
+## ISOLER LES COLONNES CATEGORIELLES
+cat_data=data.select_dtypes(include='O')
+
+COMPTER LE NOMBRE DE VARIABLE ET LEUR NOMS
+df['category'].value_counts()
+
+## DONNER RAPIDEMENT LA VARIABLE LA PLUS REPRESENTEE
+cat_data['main_category'].mode()
 
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2128,8 +2174,11 @@ df[(df['annee'] == 1979) & (df['surface'] > 60)]
 FILTRER UN DF EN FONCTION DE 2 occurence en même temps ou
 print(df[(df['année'] >1900) |(df['quartier'] == 'Père-Lachaise')])
 
-AVOIR LE NOMBRE DE VARIABLE ET LEUR NOMS
+COMPTER LE NOMBRE DE VARIABLE ET LEUR NOMS
 df['category'].value_counts()
+
+## DONNER RAPIDEMENT LA VARIABLE LA PLUS REPRESENTEE
+cat_data['main_category'].mode()
 
 SAVOIR LE NB ET QUELLES COLONNES ONT DES NA
 colonnes_nbna = df.isna().sum(axis = 0)
