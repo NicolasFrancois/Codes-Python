@@ -2070,7 +2070,25 @@ functions_to_apply = {
     }
 
 df.groupby('column_to_group_by').agg(functions_to_apply)
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+STATISTIQUES EXPLORATOIRES
 
+## ISOLER LES DONNEES CHIFFRES DANS UN NOUVEAU DATA FRAME
+
+data.select_dtypes(include=['int64','float64'])
+
+## Determiner Quantiles d'une colonne
+num_data['goal'].quantile(q = [0.25,0.5,0.75])
+
+##AFFECTER LES QUANTILES DANS DE NOUVELLES COLONNES
+stats[['q1', 'q2', 'q3']] = num_data.quantile(q=[0.25, 0.5, 0.75]).transpose()
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
 -----------------
 import pandas as pd
 import numpy as np
@@ -2115,3 +2133,13 @@ df['category'].value_counts()
 
 SAVOIR LE NB ET QUELLES COLONNES ONT DES NA
 colonnes_nbna = df.isna().sum(axis = 0)
+
+# On détermine le mode de 'store_type'
+store_type_mode = transactions['store_type'].mode()
+print("La modalité la plus fréquente de 'store_type' est:", store_type_mode[0])
+
+# On remplace les NANs de 'store_type' par son mode
+transactions['store_type'] = transactions['store_type'].fillna(transactions['store_type'].mode()[0])
+
+# On vérifie que ces deux colonnes ne contiennent plus de NANs
+transactions[['prod_subcat_code', 'store_type']].isna().sum()
