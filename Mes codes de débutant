@@ -2102,6 +2102,10 @@ STATISTIQUES EXPLORATOIRES
 
 data.select_dtypes(include=['int64','float64'])
 
+## CREER UN DATAFRAME A PARTIR D'UN AUTRE AVEC CALCUL DE LA MOYENNE
+stats = pd.DataFrame(num_data.mean(), columns = ['moyenne']) #num_data étant le dataframe de départ
+stats
+
 ## Determiner Quantiles d'une colonne
 num_data['goal'].quantile(q = [0.25,0.5,0.75])
 
@@ -2226,11 +2230,13 @@ table # On rejette si la p-value (PR>F) est inférieure à 5%. Rejeter signifie 
 import pandas as pd
 import numpy as np
 
-help(pearsonr)
+
 
 df = pd.read_csv("transactions.csv", sep =',', index_col = "transaction_id")
 ou
 df = pd.read_csv("crowdfunding.csv", index_col = 0) si il n'y a pas de séparateur
+
+help(pearsonr)
 
 df['category']= df['category'].replace(to_replace=['Poetry', 'Narrative Film', 'Music', 'Film & Video',  np.nan],value= [1, 2, 3, 4, 0])
 
