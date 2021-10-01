@@ -2042,7 +2042,7 @@ state_summary
 target_goal = data.groupby(['state']).agg({'goal': ['median', 'mean', 'min', 'max']})
 target_goal
 
-## CROSSTAB ou croiser les données
+## CROSSTAB ou croiser les données, comparer des variables entre elles
 Savoir combien de fois les occurences se rencontrent
 covid_tests = pd.read_csv("covid_tests.csv", sep =';')
 
@@ -2057,6 +2057,10 @@ la même chose en %
 pd.crosstab(colonne1,
             colonne2,
            normalize = 0) si on veut un % par ligne normalize=1 si on veut par colonne
+           
+exemple:
+table = pd.crosstab(df['main_category'],df['state'])
+table
            
 ## FILTRER LES DONNEES
 # Année égale à 1979 et surface supérieure à 60
@@ -2160,12 +2164,69 @@ target_goal
 soluce = data.groupby(['main_category']).agg({'pledged': 'sum','backers': 'sum'})
 soluce['pledged_per_backers'] = soluce['pledged']/soluce['backers']
 
+## TEST de PEARSON corrélation entre 2 variables quantitatives
+
+from scipy.stats import pearsonr
+
+pearsonr(df['backers'],df['pledged']) #retourne coéfficient de corrélation (il faut qu'il soir proche de 1 pour dire qu'il y a de forte chance pour 1 variable croisse pour que l'auttre croisse aussi et un p-value qui doit être <5% pour confirmer la corrélation)
+
+#matrice de Pearson pour corrélation
+from pandas.plotting import scatter_matrix
+%matplotlib inline
+
+df[df['pledged']<4233].plot(kind='scatter', x='pledged', y='backers', alpha=0.1);
+
+Afficher les coéfficients de corrélation entre toutes les variables
+df.corr()
+
+## CORRELATION ENTRE VARIABLES QUALITATIVES
+
+# Il faut d'abord construire un crosstab pour croiser les données
+table = pd.crosstab(df['main_category'],df['state'])
+table
+
+#Puis on sort les statistiques Qi2:
+
+from scipy.stats import chi2_contingency
+
+resultats_test = chi2_contingency(table)
+statistique = resultats_test[0]
+p_valeur = resultats_test[1]
+degre_liberte = resultats_test[2]
+
+print(statistique, p_valeur,degre_liberte)
+
+#Comme pour les variables quantitatives, on peut mesurer le niveau de corrélation entre deux variables qualitatives. Pour cela, on utilise le V de Cramer corrigé pour contrer le biais qui utilise les résultats du test du  χ2χ2 . Il renvoie une valeur entre 0 et 1.
+def V_Cramer(table, N):
+    stat_chi2 = chi2_contingency(table)[0]
+    k = table.shape[0]
+    r = table.shape[1]
+    phi = max(0,(stat_chi2/N)-((k-1)*(r-1)/(N-1)))
+    k_corr = k - (np.square(k-1)/(N-1))
+    r_corr = r - (np.square(r-1)/(N-1))
+    return np.sqrt(phi/min(k_corr - 1,r_corr - 1))
+
+V_Cramer(table, df.shape[0])
+
+si Le V_Cramer n'est pas très élevé, On en déduit qu'il n'y a pas une forte corrélation entre les deux variables mais qu'elle n'est pas non plus négligeable.
+
+## Variables Quantitatives et Qualitatives
+import statsmodels.api 
+
+result = statsmodels.formula.api.ols('pledged ~ main_category', data=df).fit() #d'abord la variable quantitative (pledged) et ensuite la variable qualitative (main_categorie)
+table = statsmodels.api.stats.anova_lm(result)
+
+table # On rejette si la p-value (PR>F) est inférieure à 5%. Rejeter signifie ici rejeter l'hypothèse selon laquelle main_category n'influe pas sur pledged
+
+
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
 -----------------
 import pandas as pd
 import numpy as np
+
+help(pearsonr)
 
 df = pd.read_csv("transactions.csv", sep =',', index_col = "transaction_id")
 ou
