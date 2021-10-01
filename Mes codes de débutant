@@ -2030,6 +2030,18 @@ functions_to_apply = {
 
 transactions.groupby('cust_id').agg(functions_to_apply)
 
+##SEQUENCER UN TABLEAU EN FONCTION DE PLUSIEURS VARIABLES type TCD
+state_summary = data.groupby(['goal_classes', 'state']).agg({'goal': 'sum'})
+round(state_summary,2)
+
+--> Rajouter des colonnes à ce tableau type TCD
+state_summary['backers'] = data.groupby(['goal_classes', 'state']).agg({'backers': 'sum'})['backers']
+state_summary
+
+## DONNER LES STATISTIQUES DE BASE MIN, MAX MOYENNE, MEDIANNE EN FONCTION DE CATEGORIES
+target_goal = data.groupby(['state']).agg({'goal': ['median', 'mean', 'min', 'max']})
+target_goal
+
 ## CROSSTAB ou croiser les données
 Savoir combien de fois les occurences se rencontrent
 covid_tests = pd.read_csv("covid_tests.csv", sep =';')
@@ -2121,6 +2133,7 @@ num_data= data.select_dtypes(include=['int64','float64']) # pour les données ch
 cat_data=data.select_dtypes(include='O') # pour le texte
 
 DATA TEXTE CATEGORIELLE
+DE BASE SI MOYENNE ET MEDIANE TROP ELOIGNEE PAS POSSIBLE LES MOYENNES NE SONT PAS REPRESENTATIVES
 
 ## ISOLER LES COLONNES CATEGORIELLES
 cat_data=data.select_dtypes(include='O')
@@ -2131,6 +2144,21 @@ df['category'].value_counts()
 ## DONNER RAPIDEMENT LA VARIABLE LA PLUS REPRESENTEE
 cat_data['main_category'].mode()
 
+##SEQUENCER UN TABLEAU EN FONCTION DE PLUSIEURS VARIABLES type TCD
+state_summary = data.groupby(['goal_classes', 'state']).agg({'goal': 'sum'})
+round(state_summary,2)
+
+--> Rajouter des colonnes à ce tableau type TCD
+state_summary['backers'] = data.groupby(['goal_classes', 'state']).agg({'backers': 'sum'})['backers']
+state_summary
+
+## DONNER LES STATISTIQUES DE BASE MIN, MAX MOYENNE, MEDIANNE EN FONCTION DE CATEGORIES
+target_goal = data.groupby(['state']).agg({'goal': ['median', 'mean', 'min', 'max']})
+target_goal
+
+## REGROUPER DES SOMMES DE 2 VARIABLES DIFFERENTES EN FONCTION DE CATEGORIE ET RAJOUTER UNE VARIABLE DE CALCUL
+soluce = data.groupby(['main_category']).agg({'pledged': 'sum','backers': 'sum'})
+soluce['pledged_per_backers'] = soluce['pledged']/soluce['backers']
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
