@@ -2143,7 +2143,12 @@ cat_data=data.select_dtypes(include='O') # pour le texte
 ----------------------------------------
 Construire un tableau de stats de base QUANTITATIVE
 ----------------------------------------
-df2_num_only = df1.select_dtypes(include=['int64','float64']) #Selection des datas numériques
+import pandas as pd
+import numpy as np
+
+df_base = pd.read_csv("crowdfunding.csv", sep =',', index_col = 0)
+
+df2_num_only = df_base.select_dtypes(include=['int64','float64']) #Selection des datas numériques
 stats = pd.DataFrame(df2_num_only.mean(), columns = ['moyenne']) #Création d'un nouveau df avec moyenne
 stats['median'] = df2_num_only.median() #Ajout de la médiane
 stats['mean_med_diff'] = stats['moyenne'] -stats['median'] #Différence entre moyenne et médiane
@@ -2214,6 +2219,10 @@ df.corr()
 ----------------------------------------
 Construire un tableau de stats de base QUALITATIF
 ----------------------------------------
+import pandas as pd
+import numpy as np
+
+df_base = pd.read_csv("crowdfunding.csv", sep =',', index_col = 0)
 
 df2_cat_only = df_base.select_dtypes(include='O') #Isoler les données qualitatives
 df2_cat_only['main_category'].value_counts(normalize=True)*100 #Donner la repartitions des catégories selon une variable 'main_category'
@@ -2234,8 +2243,84 @@ soluce
 #La solution proposée regarde la collecte versée, le nombre de contributeurs ainsi que la somme versée en moyenne par chaque contributeur.
 #L'objectif est de déterminer le couple pledged/pledged_per_backers optimal pour maximiser sa collecte
 #Games semble présenter la combinaison idéale avec la plus forte collecte et un solide ratio par contributeur    
-  
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------
+CORRELATION ENTRE Variables Quantitatives #Pour tester l'indépendance de variables lorsque les variables sont quantitatives, le test de corrélation de Pearson s'impose.
+----------------------------------------
+import pandas as pd
+import numpy as np
+from scipy.stats import pearsonr
+
+df_base = pd.read_csv("crowdfunding.csv", sep =',', index_col = 0)
+
+pd.DataFrame(pearsonr(df_base['backers'], df_base['pledged']), index=['pearson_coeff','p-value'], columns=['resultat_test']) #On effectur le test de corrélation de Pearson, Premier chiffre correlation 1 les variables sont corrélées 0 les variables sont décorrélées -1 les variables sont corrélées négativement, deuxième chiffre p-value Plus la p-value est petite, plus la probabilité de faire une erreur en rejetant l'hypothèse nulle est faible.
+#la p-value < 5%, le coefficient proche de 1, il y a une forte corrélation entre les deux variables.
+#Lorsque le nombre de backers augmentent pledged augmente aussi.
+from pandas.plotting import scatter_matrix
+%matplotlib inline
+df_base[df_base['pledged']<4233].plot(kind='scatter', x='pledged', y='backers', alpha=0.1); #représentation graphique
+df_base.corr() # Afficher les corrélation entre variables
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------
+CORRELATION ENTRE Variables Qualitatives #Lorsque les variables sont qualitatives, un test de corrélation de Pearson n'est alors pas adapté. Pour cela, on commence par utiliser la table de contingence puis test du Qi2
+----------------------------------------
+import pandas as pd
+import numpy as np
+from scipy.stats import pearsonr
+
+df_base = pd.read_csv("crowdfunding.csv", sep =',', index_col = 0)
+
+table = pd.crosstab(df_base['main_category'],df_base['state']) #Création de la table avec hypothèse les variables main_category et state sont indépendantes
+from scipy.stats import chi2_contingency
+
+resultats_test = chi2_contingency(table)
+statistique = resultats_test[0]
+p_valeur = resultats_test[1]
+degre_liberte = resultats_test[2]
+print(statistique, p_valeur,degre_liberte) #vérifier que p-value <5%
+def V_Cramer(table, N): # si p-value ok on fait le test deCramer entre deux variables qualitatives
+    stat_chi2 = chi2_contingency(table)[0]
+    k = table.shape[0]
+    r = table.shape[1]
+    phi = max(0,(stat_chi2/N)-((k-1)*(r-1)/(N-1)))
+    k_corr = k - (np.square(k-1)/(N-1))
+    r_corr = r - (np.square(r-1)/(N-1))
+    return np.sqrt(phi/min(k_corr - 1,r_corr - 1))
+
+V_Cramer(table, df.shape[0]) #Si résultat élevé alors corrélation
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------
+CORRELATION ENTRE Variables Qualitatives et quantitatives #on utilisera l'analyse de la variance (ANOVA) à un facteur qui permet de comparer les moyennes d'échantillon. L'objectif de ce test est de conclure sur l'influence d'une variable explicative catégorielle sur la loi d'une variable continue à expliquer.
+----------------------------------------
+import pandas as pd
+import numpy as np
+from scipy.stats import pearsonr
+
+df_base = pd.read_csv("crowdfunding.csv", sep =',', index_col = 0)
+
+import statsmodels.api 
+
+result = statsmodels.formula.api.ols('pledged ~ main_category', data=df_base).fit()
+table = statsmodels.api.stats.anova_lm(result)
+
+table ##Voir si la p-values (PR(>F)) <5% pour continuer
+#la p-value (PR(>F)) est inférieur à 5% donc on rejette l'hypothèse selon laquelle main_category n'influe pas sur pledged.
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 ## CORRELATION ENTRE VARIABLES QUALITATIVES // CATEGORIELLE
+
 
 # Il faut d'abord construire un crosstab pour croiser les données
 table = pd.crosstab(df['main_category'],df['state'])
