@@ -2140,7 +2140,35 @@ num_data.head()
 num_data= data.select_dtypes(include=['int64','float64']) # pour les données chiffres
 cat_data=data.select_dtypes(include='O') # pour le texte
 
-DATA TEXTE CATEGORIELLE
+----------------------------------------
+Construire un tableau de stats de base QUANTITATIVE
+----------------------------------------
+df2_num_only = df1.select_dtypes(include=['int64','float64']) #Selection des datas numériques
+stats = pd.DataFrame(df2_num_only.mean(), columns = ['moyenne']) #Création d'un nouveau df avec moyenne
+stats['median'] = df2_num_only.median() #Ajout de la médiane
+stats['mean_med_diff'] = stats['moyenne'] -stats['median'] #Différence entre moyenne et médiane
+stats[['q1', 'q2', 'q3']] = df2_num_only.quantile(q=[0.25, 0.5, 0.75]).transpose() #Ajout des colonnes avec Quantiles
+stats['min'] = df2_num_only.min()
+stats['max'] = df2_num_only.max()
+stats['min_max_diff'] = stats['max'] - stats['min']
+ecart_type = df2_num_only['backers'].std() #écart type sur une variable
+intervalle = [df2_num_only['backers'].mean() - ecart_type, df2_num_only['backers'].mean() + ecart_type] #définition de l'intervalle type sur une variable 0 ou 1
+print(intervalle)
+df2_num_only['backers_in'] = df2_num_only['backers'].between(intervalle[0], intervalle[1]).astype(int) #intégrer le 1 ou 0 de l'intervalle dans le df
+df2_num_only['backers_in'].value_counts(normalize=True) #donner la répartition en % des 0 ou 1
+outliers = df2_num_only[df2_num_only.backers_in==0] #Isoler dans un df les datas selon une répartition 0 ou 1
+outliers['backers'].mean(), outliers['backers'].median() #Calculer moyenne et médian sur l'isolement précédent
+df2_num_only['labels'] = pd.qcut(df2_num_only['backers'], 4, labels=['q1', 'q2', 'q3', 'q4'])
+viz = pd.DataFrame(columns=['q1', 'q2', 'q3', 'q4'], index=[0])
+for j in df2_num_only['labels'].unique():
+    viz.loc[0,j] = df2_num_only[df2_num_only['labels']==j]['backers'].mean()
+viz #visualiser les quantiles d'un isolement
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+DATA TEXTE QUALITATIVE // CATEGORIELLE
 DE BASE SI MOYENNE ET MEDIANE TROP ELOIGNEE PAS POSSIBLE LES MOYENNES NE SONT PAS REPRESENTATIVES
 
 ## ISOLER LES COLONNES CATEGORIELLES
@@ -2183,7 +2211,31 @@ df[df['pledged']<4233].plot(kind='scatter', x='pledged', y='backers', alpha=0.1)
 Afficher les coéfficients de corrélation entre toutes les variables
 df.corr()
 
-## CORRELATION ENTRE VARIABLES QUALITATIVES
+----------------------------------------
+Construire un tableau de stats de base QUALITATIF
+----------------------------------------
+
+df2_cat_only = df_base.select_dtypes(include='O') #Isoler les données qualitatives
+df2_cat_only['main_category'].value_counts(normalize=True)*100 #Donner la repartitions des catégories selon une variable 'main_category'
+df2_cat_only['main_category'].mode() #Isoler la catégorie qui est le plus représentée dans la variable 'main_category'
+df2_cat_only['state'].value_counts(normalize=True) #Afficher la répartition d'une variable binaire enlever normalize=True pour avoir le nombre
+df_base['goal_classes'] = pd.qcut(df_base['goal'], labels=[0, 1, 2, 3], q=4) #découper un catégorie en fonction des quartiles
+state_summary = df_base.groupby(['goal_classes', 'state']).agg({'goal': 'sum'}) #Faire un tableau type TCD pour voir la répartition des objectifs en fonction de la classe d'objectifs et l'état de réussite
+for i in [0,1,2,3]:
+    tot = df_base[df_base['goal_classes']==i].sum()
+    state_summary.loc[i, 'failed'] = state_summary.loc[i, 'failed']/tot
+    state_summary.loc[i, 'successful'] = state_summary.loc[i, 'successful']/tot #donner la répartition en % du TCD ci-dessus
+state_summary['backers'] = df_base.groupby(['goal_classes', 'state']).agg({'backers': 'sum'})['backers'] #rajouter une variable au tableau ci-dessus
+target_goal = df_base.groupby(['state']).agg({'goal': ['median', 'mean', 'min', 'max']}) #Créer un nouvezau tableau avec les stats de base
+## Si la moyenne et la médiane sont trop éloignées et l'étendue des valeurs est trop grande alors on ne peut pas donner un objectif idéal
+soluce = df_base.groupby(['main_category']).agg({'pledged': 'sum','backers': 'sum'})
+soluce['pledged_per_backers'] = soluce['pledged']/soluce['backers']
+soluce
+#La solution proposée regarde la collecte versée, le nombre de contributeurs ainsi que la somme versée en moyenne par chaque contributeur.
+#L'objectif est de déterminer le couple pledged/pledged_per_backers optimal pour maximiser sa collecte
+#Games semble présenter la combinaison idéale avec la plus forte collecte et un solide ratio par contributeur    
+  
+## CORRELATION ENTRE VARIABLES QUALITATIVES // CATEGORIELLE
 
 # Il faut d'abord construire un crosstab pour croiser les données
 table = pd.crosstab(df['main_category'],df['state'])
