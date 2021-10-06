@@ -1225,6 +1225,12 @@ def somme(ratings_no_zero):
 def moyenne(ratings_no_zero):
     return somme(ratings_no_zero)/len(ratings_no_zero)
 
+##CREER UNE LISTE DE CHIFFRES EN FONCTION D'UNE LOGIQUE
+ La commande np.arange(a, b, p) retourne un tableau 1D des nombres compris entre a et b (b exclus), avec un pas de p.
+ 
+ t = np.arange(0, 5, 0.2)
+ 
+ 
 -------------------------------------------------------------------------------------------------------------------------------------------
 
 CLASSES
@@ -2361,66 +2367,59 @@ table # On rejette si la p-value (PR>F) est inférieure à 5%. Rejeter signifie 
 
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------------------------------------------------------------------------
------------------
-import pandas as pd
+
+DATA VIZ - Matplolib
+
+%matplotlib inline
+import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+
+## GRAPHIQUE AVEC COURBE ET LIMITATION DU TABLEAU
+plt.title('Le titre de ma courbe')
+plt.xlim([80, 180])
+plt.ylim([1, 5])
+plt.plot([50,140,200], [1,2,4])
+plt.xlabel('Abscisses')
+plt.ylabel('Ordonnees');
 
 
+## GRAPHIQUE AVEC DATAFRAME
+plt.plot(df.Month, df.Product1); # ou df.index si la colonne est un l'index du df
 
-df = pd.read_csv("transactions.csv", sep =',', index_col = "transaction_id")
-ou
-df = pd.read_csv("crowdfunding.csv", index_col = 0) si il n'y a pas de séparateur
+## GRAPHIQUE SUPERPOSE AVEC CHOIX DES COULEURS ET STYLE DE TRAIT
+Pour chaque paire (x,y) d'arguments, il y a un troisième argument optionnel qui est une chaîne de caractères qui indique le style et la couleur de la ligne de la courbe. Les styles de courbes possibles sont:
 
-help(pearsonr)
+'-' : ligne continue
+'--' : tirets
+':' : ligne en pointillé
+'-.' : tirets points
+L'ensemble des couleurs possibles est:
 
-df['category']= df['category'].replace(to_replace=['Poetry', 'Narrative Film', 'Music', 'Film & Video',  np.nan],value= [1, 2, 3, 4, 0])
+'b' (bleu)
+'g' (vert) 
+'r' (rouge) 
+'c' (cyan) 
+'m' (magenta) 
+'y' (jaune) 
+'k' (noir) 
+'w' (blanc)
+t = np.arange(0,5,0.2)
 
+plt.plot(t,t,':r',t,t**2,'-g',t,t**3,'--b')
+plt.ylim([0,50])
 
-def get_nb_month(month):
-    
-    # Découpage de la chaîne sur le caractère '-month'
-    decoupage = month.split('-month')
-    
-    # On renvoie le premier élément du découpage (nb de mois)
-    nb_month = decoupage[0]
-    return nb_month
-    
-# Application des fonctions
-duration = df['duration'].apply(get_nb_month)
+plt.show()
 
+## Graphique avec axe des absisses propres
+df.plot(x='Month', y='Product1', title = "Vente par mois"); # on utilisa la fonction de df
 
-# Affectation des nouvelles valeurs
-transactions['duration'] = duration
+## CREER DES COURBES SUPERPOSEES AVEC LIMITES
+t = np.arange(0,5,0.2)
 
-    
- # Nombre de NANs par colonne
-colonnes_nbna = transactions.isna().sum(axis = 0)
+plt.plot(t,t,t,t**2,t,t**3)
+# On plot les courbes (t,t), (t,t**2) et (t,t**3) à l'intérieur de la même fonction.
 
-print("La colonne contenant le plus de NANs est:", colonnes_nbna.idxmax())
+plt.ylim([0,50]);
+#On limite l'axe des ordonnées à [0,50].
 
-FILTRER UN DF EN FONCTION DE 2 occurence en même temps &
-df[(df['annee'] == 1979) & (df['surface'] > 60)]
-
-FILTRER UN DF EN FONCTION DE 2 occurence en même temps ou
-print(df[(df['année'] >1900) |(df['quartier'] == 'Père-Lachaise')])
-
-COMPTER LE NOMBRE DE VARIABLE ET LEUR NOMS
-df['category'].value_counts()
-
-## DONNER RAPIDEMENT LA VARIABLE LA PLUS REPRESENTEE
-cat_data['main_category'].mode()
-
-SAVOIR LE NB ET QUELLES COLONNES ONT DES NA
-colonnes_nbna = df.isna().sum(axis = 0)
-
-# On détermine le mode de 'store_type'
-store_type_mode = transactions['store_type'].mode()
-print("La modalité la plus fréquente de 'store_type' est:", store_type_mode[0])
-
-# On remplace les NANs de 'store_type' par son mode
-transactions['store_type'] = transactions['store_type'].fillna(transactions['store_type'].mode()[0])
-
-# On vérifie que ces deux colonnes ne contiennent plus de NANs
-transactions[['prod_subcat_code', 'store_type']].isna().sum()
