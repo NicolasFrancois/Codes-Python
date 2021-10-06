@@ -2487,3 +2487,50 @@ plt.ylabel('Hauteur')
 plt.legend()
 
 plt.title('Mon graphique en barres');
+
+#Histogramme superposés
+plt.bar(range(len(df)) , df.Product1, label = "Produit1"); plt.bar(range(len(df)) , df.Product2, label = "Produit2", bottom = df.Product1)
+plt.xlabel('Nombre')
+plt.ylabel('Hauteur')
+
+plt.legend()
+
+plt.title('Mon graphique en barres');
+
+#Afficher 2 histogrammes avec affichage partiel des mois de l'année
+barWidth = 0.4
+
+x1 = range(12) #donner les 12 premiers mois
+x2 = [r + barWidth for r in x1 ]
+
+
+df12 = df.head(12) #Créer une liste des 12 premiers mois
+
+plt.bar(x1, df12.Product1, width = barWidth, label = "Produit1")
+plt.bar(x2, df12.Product2, width = barWidth, label = "Produit2")
+plt.xticks([0,2,4,6,8,11], ['Janvier', 'Mars', 'Mai', 'Juillet', 'Septembre', 'Decembre']) #Choisir les mois à afficher
+plt.legend();
+
+#Bar plots avec Panda
+df.head(6).plot.bar(x = 'Month', y=['Product1', 'Product2', 'Returns'], stacked=True,
+                     xticks = range(10,20), rot=0); #Stacked = True fait en sorte qu'on superpose les plots
+
+## NUAGE de POINTS
+x = range(5)
+y1 = [0,2, 3, 8, 15]
+y2 = [5, 8, 11, 16, 22]
+
+plt.scatter(range(len(y1)), y1, color='yellow', marker= '*', s=[30, 60, 90, 120, 150]) #avec changement de taille de points
+plt.scatter(range(len(y2)), y2, color=['#d248a2', '#8b48d2', '#48a5d2', '#4dd248', '#d1d248'], marker= '*', s=40); #Avec couleurs changeantes
+
+#Nuage de points, taille des points en fonction d'une variable
+df = pd.read_csv("sales_data.csv", sep =',')
+
+df.head()
+
+plt.scatter(df.Product1, df.Product2, c = 'green', s = df.Returns);
+
+#Nuage de points, couleur des points en fonction d'une variable + échelle de la couleur en fonction d'une variable
+
+df.plot.scatter(x='Product1', y='Product2', c = 'Returns', s=30, cmap = 'viridis');
+
