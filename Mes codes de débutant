@@ -1854,6 +1854,9 @@ transactions['year'] = years
 # Affichage des premières lignes de transactions
 transactions.head()
 
+!!!! Plus rapide:
+df['Mois']= df.Month.apply(lambda x : x[3:]) #si mois au format 01-janv
+
 ## CONCATENATION DES DONNEES DE 2 COLONNES DIFFERENTES DANS UNE NOUVELLE COLONNE
 transactions['prod_cat'] = transactions.astype('str').apply(lambda row: row['prod_cat_code']+'-'+row['prod_subcat_code'],
                                                             axis = 1)
@@ -2533,4 +2536,75 @@ plt.scatter(df.Product1, df.Product2, c = 'green', s = df.Returns);
 #Nuage de points, couleur des points en fonction d'une variable + échelle de la couleur en fonction d'une variable
 
 df.plot.scatter(x='Product1', y='Product2', c = 'Returns', s=30, cmap = 'viridis');
+
+## CREER HISTOGRAMME AVEC DES CHIFFRES AU HASARD
+%matplotlib inline
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+plt.hist(np.random.choice(10,40),bins = 7,color='orange',width = 0.8); #bins = le nbre de barres
+
+#Histogramme horizontal
+x = [1, 2, 2, 3, 4, 4, 4, 4, 4, 5, 5]
+plt.hist(x, range = (1, 6), bins = 5, color = '#EE3459',
+            density = True,
+            orientation = 'horizontal', rwidth = 0.6)
+plt.ylabel('valeurs')
+plt.xlabel('frequences')
+plt.title('Histogramme horizontal');
+
+#Histogramme avec 2 colonnes l'une à côté de l'autre
+df = pd.read_csv('sales_data.csv', sep =',')
+df.head()
+
+plt.hist([df.Product1,df.Product2], bins = 6, color = ['#f27750','#f7bf59'], label=['Product1','Product2'])
+
+#Histogramme superposé
+plt.hist([df.Product1, df.Product2], bins = 6, color = ['#961939', '#193996'],
+         label = ['Product1', 'Product2'],rwidth = 0.8,histtype = 'barstacked')
+plt.ylabel('Ventes')
+plt.xlabel('Frequences')
+plt.title('2 series superposées')
+plt.legend();
+
+## BOITE A MOUSTACHE
+Additionner toutes les ventes en fonction du mois
+df['Mois']= df.Month.apply(lambda x : x[3:])
+
+l=list()
+for i in df.Mois.unique():
+    l.append(df[df['Mois'] == i]['Turnover'])
+plt.boxplot(l)
+plt.xticks(range(1,13),df.Mois.unique())
+
+plt.show()
+
+plt.ylabel('Ventes')
+plt.xlabel('frequences')
+plt.title('Histogramme 2 series')
+plt.legend();
+
+#Version Panda:
+df.boxplot(column= 'Turnover', by='Mois', figsize= (7,7));
+
+##CAMEMBERTS/PIE CHARTS
+#Insérez votre code ici
+plt.figure( figsize= (6, 6) ) #definition de la taille du camembert
+
+x = [1, 2, 3, 4, 10]
+plt.pie(x, labels =['A', 'B', 'C', 'D', 'E'])
+plt.legend();
+
+#Camembert avec plus de détail
+plt.figure(figsize = (7, 7))
+
+plt.pie(x = df.head(6).Turnover, labels = ['Janv', 'Fev', 'Mars', 'Avril', 'Mai', 'Juin'], #on ne selectionne que les 6 premiers mois du DF
+           colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple'], #on affecte des couleurs
+           explode = [0, 0, 0, 0.2, 0, 0], #on demande un éloignement du centre de 0.2 pour la quatrièem valeur
+           autopct = lambda x: str(round(x, 2)) + '%', #on demande un affichages des %
+           pctdistance = 0.7, labeldistance = 1.2, # On précise la position à partir du centre du % et du label
+           shadow = True) # on affiche une ombre
+plt.legend();
+
 
