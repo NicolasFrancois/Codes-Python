@@ -2430,7 +2430,7 @@ plt.annotate('Asymptote: exp(-x)', xy=(1.5, 0.25), xytext=(2, 0.5),
 plt.annotate('Assymptote: - exp(-x)', xy=(1.5, -0.25), xytext=(2, -0.5), 
             arrowprops={'facecolor':'red' } );
 
-## GRAPHIQIE BILAN
+## GRAPHIQUE BILAN
 x = np.linspace(-6, 2, 40)
 # On crée une séquence de 40 points dans l'intervalle [-6, 2]
 
