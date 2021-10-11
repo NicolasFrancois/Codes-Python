@@ -2141,7 +2141,11 @@ plt.ylabel('Ordonnees');
 
 
 ## GRAPHIQUE AVEC DATAFRAME
+df = pd.read_csv("crowdfunding.csv", sep =',', index_col = 0)
 plt.plot(df.Month, df.Product1); # ou df.index si la colonne est un l'index du df
+
+#Version Panda avec meilleure gestion des absices et intégration du nom de la variable
+df.plot(x= 'Month', y='Product1', title= "Ventes par mois")
 
 ## GRAPHIQUE SUPERPOSE AVEC CHOIX DES COULEURS ET STYLE DE TRAIT
 Pour chaque paire (x,y) d'arguments, il y a un troisième argument optionnel qui est une chaîne de caractères qui indique le style et la couleur de la ligne de la courbe. Les styles de courbes possibles sont:
