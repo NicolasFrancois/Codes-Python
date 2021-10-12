@@ -2230,10 +2230,11 @@ df.plot(x = 'Month', y = ['Product1','Product2'], style = ["m--", "c:."], title 
 
 ## CREER HISTOGRAMMES
 
-plt.bar(range(7), [3,4,5,6,5,4,3] , color = 'blue', width = 0.6);
+plt.bar(range(7), [3,4,5,6,5,4,3] , color = 'blue', width = 0.6); # ou plt.bar(range(len(x)), x , color = 'blue', width = 0.6); avec longueur adaptée automatiquement
 
 #HISTOGRAMME EN FONCTION D'UN DF
-df = pd.read_csv('sales_data.csv')
+df = pd.read_csv('sales_data.csv') #ou
+df = pd.read_csv("crowdfunding.csv", sep =',', index_col = 0)
 
 plt.bar(range(len(df)), df.Product1);
 
@@ -2268,7 +2269,7 @@ df12 = df.head(12) #Créer une liste des 12 premiers mois
 
 plt.bar(x1, df12.Product1, width = barWidth, label = "Produit1")
 plt.bar(x2, df12.Product2, width = barWidth, label = "Produit2")
-plt.xticks([0,2,4,6,8,11], ['Janvier', 'Mars', 'Mai', 'Juillet', 'Septembre', 'Decembre']) #Choisir les mois à afficher
+plt.xticks([0,2,4,6,8,11], ['Janvier', 'Mars', 'Mai', 'Juillet', 'Septembre', 'Decembre']) #Choisir les mois à afficher et leur correspondance dans l'ordre
 plt.legend();
 
 #Bar plots avec Panda
@@ -2333,7 +2334,7 @@ df['Mois']= df.Month.apply(lambda x : x[3:])
 
 l=list()
 for i in df.Mois.unique():
-    l.append(df[df['Mois'] == i]['Turnover'])
+    l.append(df[df['Mois'] == i]['Turnover']) #Additionner les ventes ('Turnover') par mois
 plt.boxplot(l)
 plt.xticks(range(1,13),df.Mois.unique())
 
@@ -2387,7 +2388,7 @@ plt.subplot(223)
 plt.plot(df.Returns,'r-*', label = "Returns") #courbe
 
 plt.subplot(224)
-plt.hist(df.Turnover, color='green', rwidth = 0.8, label = "Turnover"); #Histogrammes
+plt.(df.Turnover, color='green', rwidth = 0.8, label = "Turnover"); #Histogrammes
 
 # Plusieurs graphiques sur une seule ligne de commande
 
