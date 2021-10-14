@@ -2518,4 +2518,38 @@ sns.countplot(x=df['po']); #ou sns.countplot(x='po', data=df);
 sns.countplot(x='po', hue='pos', data=df); #po et pos étant 2 variable de df
 
 
+#Nuage de points en fonction de deux variables
+sns.relplot(df.orb,df.pts);
 
+#nuage de poins en fonction de 3 variables
+sns.relplot(x='orb', y='pts', data=df, hue=df.po); #hue -> couleur change en fonction d'une 3ème variable, size=df.po si on veut faire changer la taille en fonction d'une autre variable, style=df.po pour changer le style des points en fonction d'une troisième variable
+
+#Nuage de points avec 5 variables
+sns.relplot(x='mp', y='age', style='pos', size='po',hue='age', data=df);
+
+#Courbe d'évolution d'une variable par rapport à une autre
+sns.relplot(x='gs', y='pf', kind='line', data=df); #gs et pf sont 2 variables avec affichage d'une intervalle de confiance dans l'ombre (points qui partagent la même abcisse)
+
+#Courbe d'évolution d'une variable par rapport à une autre sur une selection / partie d'un df
+sns.relplot(x='g', y='pf', kind='line', data=df[df['g']>60]); # avec affichage d'une intervalle de confiance dans l'ombre (points qui partagent la même abcisse)
+
+#Courbe avec 3 variables différentes
+sns.relplot(x='g', y='pf', kind='line', ci=None, hue='po', data=df[df['g']>60]); # ci= None sans intervalle de confiance, hue = 'variable' pour avoir une troisième variable différenciée par une couleur, size='variable' pour avoir une troisième variable différenciée par une taille de trait différente, style ='variable' pour avoir une troisième variable différenciée par un stylede ligne différente
+
+#Faire plusieurs graphiques séparés par une variable
+sns.relplot(df.g,df.pts,hue=df.pos,col=df.po); #col pour une séparation en colonne (horizontal) ou row pour séparation vertical
+
+#Faire plusieurs courbes séparés horizontalement et verticalement par des variables et hauteur limitée
+sns.relplot(x='mp', y='pf', kind='line', hue='pos', style='pos', row='conf', col='po', height=3,data=df);
+
+#Faire plusieurs courbes séparés horizontalement et verticalement par des variables et hauteur limitée et nombre de graphique par ligne limité:
+sns.relplot(x='mp', y='pf', style='pos', hue='pos', col='pos', col_wrap=3, height=4, kind='line', data=df);
+
+## Afficher nuage de points et droite de regression avec 3 variables dont une change la couleur:
+sns.lmplot(x='mp', y='tov', hue='po', data=df);
+
+## Afficher nuage de points et courbe de regression (donc plus arrondi que précédent) avec 3 variables dont une change la couleur:
+sns.lmplot(x='ast', y='tov', hue='po', data=df,lowess=True);
+
+## Afficher les nuages de points de correlation entre toutes les paires d'un DF et distribution de la variable en diagonale
+sns.pairplot(df.iloc[:,8:13], diag_kind='kde'); #iloc permet de selectionner les variables à étudier dans ce cas entre la huitième colonne hors index et la douzième soit 5 variables
