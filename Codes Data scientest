@@ -2550,6 +2550,42 @@ sns.lmplot(x='mp', y='tov', hue='po', data=df);
 
 ## Afficher nuage de points et courbe de regression (donc plus arrondi que précédent) avec 3 variables dont une change la couleur:
 sns.lmplot(x='ast', y='tov', hue='po', data=df,lowess=True);
-
+ ---------------------------------------------------------------------------------------------------------------------------
 ## Afficher les nuages de points de correlation entre toutes les paires d'un DF et distribution de la variable en diagonale
 sns.pairplot(df.iloc[:,8:13], diag_kind='kde'); #iloc permet de selectionner les variables à étudier dans ce cas entre la huitième colonne hors index et la douzième soit 5 variables
+-------------------------------------------------------------------------------------------------------------------------------
+## HEATMAP
+# Insérez votre code ici
+cor = df.corr() #création d'une matrice de corrélation
+
+fig, ax = plt.subplots(figsize=(12,12)) #on détermine la taille de la figure
+sns.heatmap(cor, annot=True, ax=ax, cmap='coolwarm'); #annot = True pour afficher la légende des couleurs
+
+#Nuage de points avec des variables catégorielles
+sns.catplot(data=df, x = 'pos', y='pts'); # pour un affichage en colonnes ou inverser x et y pour un affichage en ligne
+
+#Nuage de points qui ne se chevauchent pas avec une différenciation d'une troisième variable avec de la couleur
+sns.catplot(data=df, x = 'pos', y='pts', hue='conf', kind ='swarm'); 
+
+#Boîte à moustache avec séparation en colonne par une troisième variable
+sns.catplot(data=df, x = 'pos', y='pts', kind ='box', col = 'po');
+
+#Boîte à moustache avec troisième variable en couleur:
+sns.catplot(x='pos', y='pts', hue='conf', kind='box', data=df);
+
+#Boîte à moutache amélioré, plus visible, plus utile;
+sns.catplot(x='pos', y='pts', hue='conf', kind='boxen', data=df);
+
+#diagramme en violon pour ajouter une estimation par noyau de la densité de cette distribution:
+sns.catplot(x='pos', y='stl', kind='violin', data=df);
+
+#Diagramme en violon pour 3 variables avec identification par couleur
+sns.catplot(x='pos', y='trb', kind='violin', hue='conf',split=True,data=df);
+
+#Graphique en barre
+sns.catplot(x='conf', y='orb', kind = 'bar', hue='po', data=df);
+
+#Superposition de 2 graphiques:
+g = sns.catplot(x='pos', y='pf', kind='violin', inner=None, data=df) #on définie le premier graphique comme g
+sns.swarmplot(x='pos', y='pf', size=3, color='k', alpha=0.7, data=df, ax=g.ax) #ax=g.ax stipule qu'il faut superposer le graphique g, k = couleur noire, alpha est l'indice d'opacité, size pour la taille des points
+
