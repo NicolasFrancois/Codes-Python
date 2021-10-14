@@ -2589,3 +2589,23 @@ sns.catplot(x='conf', y='orb', kind = 'bar', hue='po', data=df);
 g = sns.catplot(x='pos', y='pf', kind='violin', inner=None, data=df) #on définie le premier graphique comme g
 sns.swarmplot(x='pos', y='pf', size=3, color='k', alpha=0.7, data=df, ax=g.ax) #ax=g.ax stipule qu'il faut superposer le graphique g, k = couleur noire, alpha est l'indice d'opacité, size pour la taille des points
 
+#Distribution sur 2 variables
+g = sns.FacetGrid(df, col='conf') #On identifie les nombre de graphiques de distribution en fonction du nombre d'occurence de la variable conf
+g.map(plt.hist, 'age'); # on spécifie qu'on veut voir la distribution de l'age par occurence de la variable définie au dessus
+
+#Nuage de points sur 3 variables
+g = sns.FacetGrid(df, col='po',row='pos', hue ='conf') #repartition des graphique en ligne par variable pos et par colonne par la variable pos avec couleur en fonction de la variable conf
+g.map(plt.scatter, 'mp', 'ft.'); #nuage de points des variables md et ft.
+
+ ---------------------------------------------------------------------------------------------------------------------------
+#Nuage de points entre toutes les variables d'un df
+ ---------------------------------------------------------------------------------------------------------------------------
+g = sns.PairGrid(df.iloc[:,14:21], hue='po') #on selectionne les variables des colonnes 14 à 20
+g.map(plt.scatter, alpha=0.6) #choix du type de graphique
+g.add_legend()#on rajoute la légende
+
+
+#Afficher dans un PairGrid des colonnes 1 à 5 de df, la courbe de densité estimée de chaque variable, ainsi que la densité bivariée estimée entre chaque paire de variable sur 6 niveaux à l'aide de la fonction kdeplot
+g = sns.PairGrid(df.iloc[:,1:6])
+g.map_diag(sns.kdeplot)
+g.map_offdiag(sns.kdeplot, n_levels=6)
