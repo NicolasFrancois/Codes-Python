@@ -2485,3 +2485,37 @@ plt.xticks([])
 plt.yticks([]);
 # On supprime les graduations sur le nouveau graphique.
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## SEABORN
+
+%matplotlib inline
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+
+df = pd.read_csv('nba_sb2.csv')
+
+df.head()
+
+#Afficher la distribution d'une variable quantitative
+sns.displot(df['age']);
+
+# Graphique de distribution avec intégration de une estimation de la densité par méthode de noyau et rug plot (tiges verticales) et de coiuleur rouge
+sns.displot(df['age'], bins=10, kde=True, rug=True, color='red');
+
+#Graphique uniquement sur estimation de la densité et couper les extremités des absices
+sns.kdeplot(df.age, shade = True, cut=0); #shade colorier la zone sous la courbe, cut couper aux limites
+
+#Afficher la proportion (ou le nombre) d'observations inférieures à chaque valeur unique (ECDF)
+sns.displot(df['age'], kind='ecdf'); #ou sns.ecdfplot(df['age']);
+
+## Afficher la distribution de variables qualitatives
+sns.countplot(x=df['po']); #ou sns.countplot(x='po', data=df);
+
+## Afficher la distribution de 2 variables qualitatives (croisement de 2 variables)
+sns.countplot(x='po', hue='pos', data=df); #po et pos étant 2 variable de df
+
+
+
