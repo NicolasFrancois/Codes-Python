@@ -1499,7 +1499,7 @@ transactions.loc[[80712190438, 29258453508], ['Tax', 'total_amt']]
 # Extraction des 4 premières lignes et des 3 premières colonnes de transactions SLICING
 transactions.iloc[0:4, 0:3]
 
-# On séléctionne les lignes du DataFrame df pour lesquelles la colonne 'col 2' vaut 3 // UTILISATION .iloc
+# On séléctionne les lignes du DataFrame df pour lesquelles la colonne 'col 2' vaut 3 // UTILISATION .iloc // Partie
 df[df['col 2'] == 3]
 
 df.loc[df['col 2'] == 3]
@@ -1510,7 +1510,7 @@ C'est donc un outil très utile pour une première visualisation du type et de l
 
 Pour analyser les variables catégorielles, il est préférable de commencer par utiliser la méthode value_counts qui renvoie le nombre d'occurrences pour chaque modalité de ces variables. La méthode value_counts ne peut pas s'utiliser directement sur un DataFrame mais que sur les colonnes du DataFrame qui sont des objets de la classe pd.Series.
 
-##Afficher et compter les modalités de la variable
+##Afficher et compter la distribution des modalités de la variable
 data['main_category'].value_counts()# juste compter
 data['main_category'].value_counts(normalize=True) #afficher %
 
@@ -1524,6 +1524,11 @@ NETTOYAGE DES DONNEES
 
 ##COMPTER LE NOMBRE DE DOUBLONS
 print(df.duplicated().sum())
+
+## Scanner une variable et vérifier si un texte est contenu dans une variable
+df['is_drama'] = df['listed_in'].str.contains('Dramas')
+
+print(df[['is_drama','listed_in']])
 
 ## REMPLACEMENT DES DOUBLONS
 La méthode d'un DataFrame permettant de supprimer les doublons est drop_duplicates.
@@ -1681,7 +1686,7 @@ part_2 = transactions[transactions.columns[4:]]
 # Reconstitution du DataFrame transactions par concaténation
 union = pd.concat([part_1,part_2], axis = 1)
 
-## FUSION DE 2 DATAFRAMES (Transactions et customer) PAR LA GAUCHE SUR COLONNE 'cust_id'
+## FUSION DE 2 DATAFRAMES (Transactions et customer) PAR LA GAUCHE SUR COLONNE 'cust_id' // Concatener
 fusion = transactions.merge(right = customer, on = 'cust_id', how = 'left')
 
 ## AUTRES TYPE DE FUSION DE DATAFRAME
