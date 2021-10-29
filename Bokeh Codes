@@ -1,0 +1,34 @@
+IMPORTER LES PACKAGES LES PLUS INTERESSANTS
+
+from bokeh.plotting import figure, show, output_notebook
+output_notebook() 
+
+
+#CREATION D'UNE COURBE SUR BOKEH
+from bokeh.plotting import figure # Importation de la classe figure qui permet de créer un graphique bokeh.
+from bokeh.plotting import show   # Importation de la fonction show qui permet d'afficher une figure.
+
+
+# Instanciation d'une figure
+
+p = figure(plot_width = 500,                   # largeur de la figure
+           plot_height = 400,                  # hauteur de la figure
+           title = "Ma première courbe Bokeh") # titre
+
+# Listes de coordonnées
+
+x = [0, 2, 4, 6, 8]   # abscisses de chaque point
+y = [1, 4, 4, 8, 12]  # ordonnées de chaque point
+
+
+## Création d'une courbe de type 'line'
+
+p.line(x,                # abscisses
+       y,                # ordonnées
+       line_width = 2)   # épaisseur du trait
+
+
+## Affichage de la figure p dans l'output de la cellule
+
+show(p)
+
