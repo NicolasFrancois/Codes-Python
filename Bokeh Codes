@@ -3,7 +3,7 @@ IMPORTER LES PACKAGES LES PLUS INTERESSANTS
 from bokeh.plotting import figure, show, output_notebook
 output_notebook() 
 
-
+--------------------------------
 #CREATION D'UNE COURBE SUR BOKEH
 from bokeh.plotting import figure # Importation de la classe figure qui permet de créer un graphique bokeh.
 from bokeh.plotting import show   # Importation de la fonction show qui permet d'afficher une figure.
@@ -32,3 +32,225 @@ p.line(x,                # abscisses
 
 show(p)
 
+-----------------------------------------------------------
+
+ # SUPERPOSER 2 TYPES DE GRAPHIQUESUR UN SEUL GRAPHIQUE
+ 
+ p = figure(plot_width = 500,                   # largeur de la figure
+           plot_height = 500,                  # hauteur de la figure
+           )
+
+x = [1, 2, 3, 4, 5]
+y1 = [0, 2, 3, 8, 15]
+y2 = [5, 8, 11, 16, 22]
+
+p.circle(x, y1, color='black') #premier graphique avec des points en rond
+
+colors = ['yellow','orange','red','pink','purple'] #on instance la liste colors qui va paramètrer la couleur dans l'ordre du graphique ci-dessous
+
+p.square(x, y2, size=15, color=colors)#deuxième graphique avec des points en carrés et des couleurs en fonction de la liste ci-dessus
+
+show(p) 
+
+## CREATION D'UN GRAPHIQUE AVEC PLUSIEURES COURBES DONT CERTAINES AVEC DES POINTS SUR LA COURBE
+
+# Création d'une liste d'abscisses allant de 0 à 5 avec un pas de 0,2
+
+from numpy import arange
+
+x = arange(0, 5, 0.2)
+
+# Création d'une courbe correspondant à f(x) = x
+
+q.line(x,                 # abscisses
+       x,                 # ordonnées
+       legend = "y = x")  # légende
+      
+
+# Création d'un nuage de points en forme de cercle
+
+q.circle(x,                  # abscisses
+         x,                  # ordonnées
+         legend = "y = x",   # légende
+         fill_color="white", # couleur de remplissage des cercles
+         size = 8)           # taille des cercles
+
+# Affichage de la figure
+
+show(q)
+DEUXIEME COURBE AVEC POINTSSUR LA COURBE
+# Liste d'ordonnées de la fonction f(x) = x^3
+
+y3 = x ** 3
+
+# Création d'une courbe correspondant à f(x) = x^3
+
+q.line(x,                          # abscisses
+       y3,                         # ordonnées
+       legend = "y = x^3",         # légende
+       line_color = "orange")      # couleur des lignes
+      
+# Création d'un nuage de points en forme de cercle
+
+q.circle(x,                        # abscisses
+         y3,                       # ordonnées
+         legend = "y = x^3",       # légende
+         color = "orange",         # couleur des cercles
+         size = 6)                 # taille des cercles
+        
+# Affichage de la figure
+
+show(q)
+
+TROISIEME ET QUATRIEME COURBE SANS POINTS SUR LA COURBE
+
+# Listes d'ordonnées
+
+y2 = x ** 2   
+y4 = x ** 4
+
+# Création d'une courbe correspondant à f(x) = x^2
+
+q.line(x,                    # abscisses
+       y2,                   # ordonnées
+       legend = "y = x^2",   # légende
+       line_color = "blue",  # couleur des lignes
+       line_width = 3)       # épaisseur des lignes
+
+# Création d'une courbe correspondant à f(x) = x^4
+
+q.line(x,                    # abscisses
+       y4,                   # ordonnées
+       legend = "y = x^4",   # légende
+       line_color = "red",   # couleur des lignes
+       line_dash = "dashed") # style de tracé                                                       
+
+# Affichage de la figure
+
+show(q)
+
+---------------------
+## REGROUPER LES DONNEES D'UN GRAPHIQUE DANS UN OBJET
+
+# Liste d'abscisses
+
+x = [1, 2, 3, 4, 5]
+
+# Liste d'ordonnées
+
+y1 = [1, 15, 5, 18, 13]
+y2 = [5, 9, 10, 15, 25]
+
+# Instanciation de la figure
+
+p = figure(plot_width = 600,           # largeur de la figure
+           plot_height = 600)          # hauteur de la figure
+
+# Instanciation d'un nuage de points en forme de cercle de coordonnées (x,y1)
+
+r1 = p.circle(x,                  # abscisses
+              y1,                 # ordonnées
+              legend = 'y1')      # légende
+
+# Modification du nuage de points. L'accès à l'instance du nuage de points se fait grâce à l'attribut glyph de r1.
+
+r1.glyph.size = 50                   # taille des points
+r1.glyph.fill_alpha = 0.2            # opacité de l'intérieur des points
+r1.glyph.line_color = 'firebrick'    # couleur du contour des cercles
+r1.glyph.line_dash = 'dashed'        # style de tracé du contour des cercles
+r1.glyph.line_width = 2              # épaisseur de contour des cercles
+
+# Instanciation d'une courbe de coordonénes (x, y2)
+
+p.line(x,                       # abscisses
+       y2,                      # ordonnées
+       line_dash = 'dotdash',   # style de tracé
+       line_width = 1,          # épaisseur de la ligne
+       color = 'blue',          # couleur de la ligne
+       legend = 'y2')           # légende
+
+# Affichage de la figure
+
+show(p)
+
+----------------------------------------------------------------------
+## GRAPHIQUE AVEC AFFICHAGE D'INFORMATIONS LORSQU'ON TOUCHE UN POINT
+# Listes de coordonnées
+
+x = [1, 1.5, 3, 4.5, 7, 8]
+y = [-1, 3, -4, 5, 8, -6]
+
+# Instanciation d'une figure
+
+p = figure(plot_width = 600,
+           plot_height = 400)
+
+# Instanciation du nuage de points
+
+r = p.square(x,                      # abscisses
+             y,                      # ordonnées
+             color = 'blue',         # couleur
+             size = 20,              # taille
+            
+             hover_color = 'red',    # couleur lorsqu'un point est survolé par le curseur
+             hover_alpha = 0.5)      # opacité lorsqu'un point est survolé par le curseur
+
+# Importation de la classe HoverTool
+
+from bokeh.models.tools import HoverTool
+
+# Instanciation d'un outil HoverTool
+
+h = HoverTool(
+              renderers = [r],                      # liste de GlyphRenderer avec lesquels on veut interagir 
+    
+              tooltips = [("(x, y)" , "($x, $y)"),  # liste d'informations à afficher dans la tooltip
+                          ("index" , "$index")]
+             )
+
+# Ajout du HoverTool aux outils de la figure
+
+p.add_tools(h)
+
+# Affichage de la figure
+
+show(p)
+
+## GRAPHIQUE AVEC UN PERSONNALISATION DES ABSCISSES ET ORDONNES
+from numpy import linspace
+from numpy.random import randint
+
+# Listes de coordonnées 
+
+x = linspace(0,10,50)
+y = randint(0,100, 50)
+
+# Instanciation de la figure
+
+p = figure(plot_width=600,      # largeur
+           plot_height=400)     # hauteur
+
+# Instanciation du nuage de points en forme de cercles
+ 
+p.circle(x,                     # abscisses
+         y,                     # ordonnées
+         color='mediumblue')    # couleur
+
+# Personnalisation des axes 
+
+p.axis.axis_line_width = 3                    # épaisseur des axes
+p.axis.axis_line_color = "navy"               # couleur des axes
+p.axis.major_label_text_color = "gold"        # couleur des labels de graduation des axes
+
+p.xaxis.axis_label = "abscisses"              # label de l'axe x
+
+p.yaxis.axis_label = "ordonnées"              # label de l'axe y
+p.yaxis.major_label_orientation = "vertical"  # orientation des labels de graduation de l'axe y
+
+# Personnalisation de la grille
+
+p.grid.grid_line_alpha = 0          # opacité de la grille
+
+# Affichage de la figure
+
+show(p)
