@@ -1514,6 +1514,9 @@ Pour analyser les variables catégorielles, il est préférable de commencer par
 data['main_category'].value_counts()# juste compter
 data['main_category'].value_counts(normalize=True) #afficher %
 
+## Lister toutes les modalités d'une variable
+x = df['Store'].unique()
+
 # Quelle est la moyenne du montant des transactions dont le montant est positif 
 
 transactions[transactions['total_amt']  > 0].describe()
