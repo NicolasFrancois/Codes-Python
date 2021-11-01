@@ -1,0 +1,151 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+%matplotlib inline
+
+pd.read_csv(filepath_or_buffer , sep = ',', header = 0, index_col = 0 ... )
+
+df["Date"]= pd.to_datetime(df["Date"]) #convertir en date exploitable
+
+## Faire des camenberts 
+# Insérez votre code ici
+# Camembert StoreType
+plt.subplot(3, 2, 1) #séquencer plusieurs camenberts,sur 3 lignes et 2 camenberts par ligne, et on paramètre le premier camembert
+plt.title("Répartition de la variable StoreType") #mettre un titre
+plt.pie(x             = df['StoreType'].value_counts(), # La variable à afficher
+        labels        = ['Type A', 'Type D', 'Type C', 'Type B'], #le nom des différentes modalités
+        explode       = [0.05, 0.05, 0.05, 0.05], #éloignement de la part de camembert par rapport au centre
+        colors        = ['#66d8bc', '#8f5ef4', '#bbcbda', '#7b7c7c'], # couleurs
+        labeldistance = 1.1, #la distance de l'étiquette
+        autopct       = lambda x: str(np.round(x, 1)) + '%', # affichage des pourcentages avec 1 chiffre après la virgule
+        pctdistance   = 0.8, #éloignement du centre
+        shadow        = True) #afficher une ombre
+
+# Camembert Assortment
+plt.subplot(3, 2, 2)
+plt.title("Répartition de la variable Assortment")
+plt.pie(x             = df['Assortment'].value_counts(),
+        labels        = ['Assortiment de base', 'Assortiment élargi'],
+        explode       = [0.05, 0.05],
+        colors        = ['#66d8bc', '#8f5ef4'],
+        labeldistance = 1.1,
+        autopct       = lambda x: str(np.round(x, 1)) + '%',
+        pctdistance   = 0.8,
+        shadow        = True)
+
+# Camembert Promo
+plt.subplot(3, 2, 3)
+plt.title("Répartition de la variable Promo")
+plt.pie(x             = df['Promo'].value_counts(),
+        labels        = ['Hors Promotion', 'En Promotion'],
+        explode       = [0.05, 0.05],
+        colors        = ['#66d8bc', '#8f5ef4'],
+        labeldistance = 1.1,
+        autopct       = lambda x: str(np.round(x, 1)) + '%',
+        pctdistance   = 0.8,
+        shadow        = True)
+
+# Camembert SchoolHoliday
+plt.subplot(3, 2, 4)
+plt.title("Répartition de la variable SchoolHoliday")
+plt.pie(x             = df['SchoolHoliday'].value_counts(),
+        labels        = ['Hors Vacances Scolaires', 'Pendant Vacances Scolaires'],
+        explode       = [0.05, 0.05],
+        colors        = ['#66d8bc', '#8f5ef4'],
+        labeldistance = 1.1,
+        autopct       = lambda x: str(np.round(x, 1)) + '%',
+        pctdistance   = 0.8,
+        shadow        = True)
+
+# Camembert StateHoliday
+plt.subplot(3, 2, 5)
+plt.title("Répartition de la variable StateHoliday")
+plt.pie(x             = df['StateHoliday'].value_counts(),
+        labels        = ['Jours normaux', 'Jours fériés',
+                         'Fête de Pâques', 'Jour de Noël'],
+        explode       = [0., 1.25, 1.15, 0.55],
+        colors        = ['#66d8bc', '#8f5ef4', '#bbcbda', '#7b7c7c'],
+        labeldistance = 1.4,
+        autopct       = lambda x: str(np.round(x, 1)) + '%',
+        pctdistance   = 1.2,
+        shadow        = True)
+
+
+
+# Pour agrandir la figure
+fig = plt.gcf() # gcf = "get current figure"
+fig.set_size_inches(10,15) # définit la taille de la figure en pouces
+
+## Regrouper les ventes en moyenne et médiane
+## Regrouper des données en moyenne et médiane par jour
+plt.figure(figsize = (20,5))
+
+# On utilise l'argument 'as_index = False' pour conserver la colonne 'Date'
+# Par défaut le groupby met la colonne utilisé pour le regroupement en index.
+
+mean_sales = df.groupby('Date', as_index = False).agg({'Sales':'mean'}) #on crée un df avec une variable la moyenne des ventes par jour
+median_sales = df.groupby('Date', as_index = False).agg({'Sales':'median'}) #on crée un df avec une variable la médiane des ventes par jour
+
+# Pour un résultat équivalent, nous aurions pu :
+#      - Appliquer la méthode 'reset_index' après l'aggregation
+#      - Utiliser l'attribut '.index' des DataFrames dans 'plot_date' pour récupérer les dates
+
+plt.plot_date(x = mean_sales['Date'],
+              y = mean_sales['Sales'],
+              xdate = True,
+              ls = '-',
+              label = 'Moyenne')
+
+plt.plot_date(x = median_sales['Date'],
+              y = median_sales['Sales'],
+              xdate = True,
+              ls = '-',
+              label = 'Médiane')
+
+plt.legend()
+
+## Créer une variable de ventes cumulées
+# Insérez votre code ici
+
+# Calcul des ventes totales quotidiennes des 20 magasins.
+total_sales = df.groupby('Date')['Sales'].sum()
+
+# Calcul des ventes totales cumulées
+cumulative_total_sales = total_sales.cumsum()
+
+# Affichage de la série temporelle
+plt.plot_date(cumulative_total_sales.index, cumulative_total_sales.values)
+
+## Créer des variables qualitatives depuis une variable quantitatives en divisant en nombre de plots l'axe des X / Segmenter en fonction d'un nombre de plots
+df['cat_Sales'] = pd.cut(df['Sales'], bins = 8, labels=['cat1','cat2','cat3','cat4', 'cat5','cat6','cat7', 'cat8'])
+
+plt.figure(figsize=(14,12))
+sns.countplot(x='cat_Sales', data=df);
+
+## CREER DES NOUVELLES VARIABLES DE SOMMES, MEDIANES... PAR JOUR
+df.groupby('Date', as_index = False).agg({'Sales':'sum','Customers':'sum'}) #Creation d'un DF des sommes des ventes et de clients par jour
+
+## REGROUPER LES MAGASIN PAR VARIABLES ET LES CLASSER (TRIER) EN FONCTION DU CA
+# Insérez votre code ici
+agg_store = df.groupby(['Store'], as_index = False).agg({'Sales':'sum','Customers':'sum','Promo':'sum','CompetitionDistance':'unique'})
+agg_store = agg_store.sort_values(by = 'Sales', ascending = True)
+
+color = (0.12156862745098039, 0.47058823529411764, 0.7058823529411765)
+
+plt.figure(figsize = (9,5))
+plt.title('Ventes par magasin',fontsize=18)
+sns.barplot(x = 'Store', y = 'Sales', order = agg_store['Store'].values, data = agg_store, color = color);
+
+vente_lead = 0
+for i in agg_store['Store'].iloc[-3:]:
+    sale = agg_store[agg_store['Store']==i]['Sales'].sum()
+    vente_lead += sale
+
+vente_less = 0
+for i in agg_store['Store'].iloc[:3]:
+    sale = agg_store[agg_store['Store']==i]['Sales'].sum()
+    vente_less += sale
+
+print('Pourcentage des ventes des plus gros magasins:',vente_lead/agg_store.Sales.sum()*100,'%')
+print('Pourcentage des ventes des plus petits magasins:',vente_less/agg_store.Sales.sum()*100,'%')
