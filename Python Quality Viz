@@ -1568,6 +1568,16 @@ new_types = {'Store_type'       : 'int',
 
 transactions = transactions.astype(new_types)
 
+
+## Définir une fonction color_ qui affecte les couleurs suivantes selon type Appliquer une modalité a une variable:
+
+def color_(x):
+    Type = ['Dark','Electric','Fire','Grass','Ice','Rock','Water']
+    color = ['darkorchid','yellow','darkorange','green','lightcyan','maroon','blue']
+    return color[Type.index(x)]
+    
+df['color'] = df['Type 1'].apply(color_)
+
 ## CHANGER LE TYPE DES DONNES D'UN DATAFRAME
 # Méthode 1 : Création d'un dictionnaire puis appel à la méthode astype du DataFrame
 dictionnaire = {'col_1': 'int',
@@ -1838,6 +1848,8 @@ df[(df['annee'] == 1979) & (df['surface'] > 60)]
 
 # Année supérieure à 1900 ou quartier égal à 'Père-Lachaise'
 df[(df['année'] > 1900) | (df['quartier'] == 'Père-Lachaise')]
+df = df[(df["Type 1"]=='Dark')|(df["Type 1"]=='Electric')|(df["Type 1"]=='Grass')|
+     (df["Type 1"]=='Ice')|(df["Type 1"]=='Rock')|(df["Type 1"]=='Water')|(df["Type 1"]=='Fire')]
 
 ##Fusionner des DataFrames grâce à la fonction concat et la méthode merge :
 # Concaténation verticale
