@@ -1,0 +1,98 @@
+scikit-learn
+
+MODULES A IMPORTER
+# Import des bibliothèques nécessaires
+from sklearn import linear_model
+from sklearn import preprocessing
+from sklearn.model_selection import train_test_split
+import pandas as pd
+import numpy as np
+
+# Lecture du fichier "admissions.csv"
+df = pd.read_csv('admissions.csv')
+
+# Affichage des premières lignes
+df.head()
+
+#voir les infos d'un df
+df.info()
+
+#Supprimer les valeurs nulles d'un df
+df = df.dropna()
+
+## Créer des classes de performances
+test_gre = pd.cut(x = df['gre'],
+                  bins = [200, 450, 550, 620, 800],
+                  labels = ['mauvais', 'moyen', 'moyen +', 'bon'])
+                  
+                  
+## les croiser pour afficher la distribution
+pd.crosstab(df['admit'], test_gre, normalise=column) on met normalise si on veut un % en colonne (column) ou en ligne (line)
+
+## Dichotomisation des classes crées en 0/1
+df = df.join(pd.get_dummies(df.niveaux_notes, prefix='niveau')) #on dichotomise la variable niveaux_notes (mauvais, moyen, moyen+...) en y rajouter le préfixe 'niveau' (niveau_mauvais : 1 ou 0 ...) pour nommer les colonnes et on les joint au DF crée
+df = df.join(pd.get_dummies(df.test_gre, prefix='gre'))
+
+# Création d'un df avec les données qui vont nous servir pour le marchine learning:
+data = df.iloc[:,4:13]
+target = df['admit'] #on définit la cible de notre prédiction
+
+# Décomposition aléatoire des données en deux ensembles d'entraînement et de test
+# par défaut l'échantillon est aléatoirement réparti
+X_train, X_test, y_train, y_test = train_test_split(data, target, test_size=0.2, random_state=66) # avec comme hypothèse que 20% des données seront pour le test random_state = 66 pour une reproductivité de l'aléatoire
+
+----------------------------------------------------------------------------------------------------------
+Classification par régression logistique
+----------------------------------------------------------------------------------------------------------
+# Création du classifieur et construction du modèle sur les données d'entraînement
+clf = linear_model.LogisticRegression(C=1.0) #creation
+clf.fit(X_train, y_train)#entrâinement
+df.head()
+
+##Prédire les données de l'ensemble de test et stocker les dans la variable y_pred
+y_pred = clf.predict(X_test)
+
+# Calcul de la matrice de confusion 
+## Méthode 1 : à l'aide de sklearn
+from sklearn.metrics import confusion_matrix 
+cm = confusion_matrix(y_test,y_pred)
+print(cm)
+
+## Méthode 2 : à l'aide de pandas
+cm = pd.crosstab(y_test, y_pred, rownames=['Classe réelle'], colnames=['Classe prédite'])
+cm
+
+## Calculer le taux de bonnes prédictions du modèle.
+clf.score(X_test, y_test)
+
+## Afficher le rapport de classification de nos prédictions.
+from sklearn.metrics import classification_report
+print(classification_report(y_test, y_pred))
+
+##Prédiction selon modèle et comparation avec le réel
+probs = clf.predict_proba(X_test) #Créer un tableau probs contenant les probabilités pour les individus de X_test d'appartenir à la classe 0 ou la classe 1.
+y_preds = np.where(probs[:,1]>0.4,1,0) #Créer un vecteur y_preds qui, pour chaque ligne de probs vaut 1 si la probabilité d'appartenir à la classe 1 est supérieure à 0.4, et 0 sinon.
+cm = pd.crosstab(y_test, y_preds, rownames=['Classe réelle'], colnames=['Classe prédite']) #Afficher une matrice de confusion entre les vrais labels de y_test et y_preds
+cm #voir la diagonale pour voir la si la distribution réel est en phase avec les prédictions
+
+## Création Courbe ROC
+from sklearn.metrics import roc_curve, auc #Importer les fonctions roc_curve() et auc().
+
+fpr, tpr, seuils = roc_curve(y_test, probs[:,1], pos_label=1) #Appliquer la fonction roc_curve() à y_test et la deuxième colonne de probs, en précisant que le label positif dans notre cas est 1. Stocker les résultats retournés dans les tableaux fpr, tpr, seuils.
+roc_auc = auc(fpr, tpr) #Calculer dans roc_auc l'AUC correspondant aux valeurs de fpr et tpr
+
+import matplotlib.pyplot as plt
+
+plt.plot(fpr, tpr, color='orange', lw=2, label='Modèle clf (auc = %0.2f)' % roc_auc) #avec affichage des spécificités
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--', label='Aléatoire (auc = 0.5)') #avec affichage des spécificités
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('Taux faux positifs')
+plt.ylabel('Taux vrais positifs')
+plt.title('Courbe ROC')
+plt.legend(loc="lower right")
+plt.show();
+
+--------------------------------------------------------------------------------
+Support Vector Machine (SVM) que des variables numériques
+
