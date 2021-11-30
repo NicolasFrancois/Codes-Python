@@ -96,3 +96,216 @@ plt.show();
 --------------------------------------------------------------------------------
 Support Vector Machine (SVM) que des variables numériques
 
+from sklearn import svm
+from sklearn import model_selection
+from sklearn.model_selection import train_test_split
+from sklearn importpreprocessing
+import pandas as pd
+import numpy as np
+
+#Diviser les matrices définies ci-dessus en un ensemble d'entraînement et de test. Précisément, data sera divisé en X_train et X_test et target sera divisé en y_train et y_test.
+X_train, X_test, y_train, y_test= train_test_split(data, target, test_size=0.2)
+
+#Créer un tableau X_train_scaled, contenant les données centrées réduites de X_train // centrer réduire
+X_train_scaled = preprocessing.scale(X_train)
+print(X_train_scaled.mean(axis=0)) #Afficher la moyenne de chaque colonne de X_train_scaled.
+print(X_train_scaled.std(axis=0)) Afficher l'écart type de chaque colonne de X_train_scaled.
+
+#Il faut passer pas une étape de fit afin de ne pas changer la performance du modèle après intégration de données réelle, cette étape de garder les données d'entrainement pour le modèle
+#Créer un objet scaler comme ci-dessus et l'appliquer à X_train pour retourner le tableau X_train_scaled centré-réduit.
+scaler = preprocessing.StandardScaler().fit(X_train)
+X_train_scaled = scaler.transform(X_train)
+
+#Puis il faut prépaere les données de test dans le même moulin
+X_test_scaled = scaler.transform(X_test)
+print(X_test_scaled.mean(axis=0))
+print(X_test_scaled.std(axis=0))
+
+--------------------------------------------------------------------------------
+Classification par machines à vecteurs de support 
+
+
+#Créer un classifieur clf, ayant pour paramètres gamma=0.01 et kernel='poly', en utilisant la méthode SVC du package svm.
+clf = svm.SVC(gamma=0.01,  kernel='poly')
+
+#Entraîner l'algorithme sur l'ensemble d'entraînement (X_train_scaled et y_train du modèlede SVM).
+clf.fit(X_train_scaled, y_train)
+
+--------------------------------------------------------------------------------
+Évaluation du modèle de classification
+
+# Effectuer les prédictions sur l'ensemble de test et les stocker dans la variable y_pred.
+y_pred = clf.predict(X_test_scaled)
+
+#Afficher une matrice de confusion à partir de ces prédictions
+pd.crosstab(y_test, y_pred, rownames=['Classe réelle'], colnames=['Classe prédite'])
+
+#Configurer des hyperparamètres
+#Créer un dictionnaire parametres contenant les valeurs possibles prises pour le paramètre C:[0.1,1,10], pour kernel: ['rbf', 'linear','poly'] et pour gamma:[0.001, 0.1, 0.5].
+parametres = {'C':[0.1,1,10], 'kernel':['rbf','linear', 'poly'], 'gamma':[0.001, 0.1, 0.5]}
+
+#Appliquer la fonction model_selection.GridSearchCV() au modèle clf, en lui spécifiant dans l'argument param_grid la grille de paramètres créée plus haut. Retourner le classifieur ainsi créé dans grid_clf.
+L'argument scoring permet de choisir la métrique que l'on souhaite utiliser pour évaluer la performance des modèles, par défaut c'est l'accuracy.
+grid_clf = model_selection.GridSearchCV(estimator=clf, param_grid=parametres)
+
+#Entraîner grid_clf sur l'ensemble d'entraînement, (X_train_scaled, y_train). Sauvegarder les résultats dans l'objet grille.
+grille = grid_clf.fit(X_train_scaled,y_train)
+
+#Afficher les meilleurs paramètres de la grille pour notre modèle grid_clf.
+print(grid_clf.best_params_) #best_params_ est  un module crée par DataScientest pour l'exercice
+
+#Effectuer à présent les prédictions de classes grâce au modèle grid_clf sur l'ensemble de test et les stocker dans la variable y_pred
+y_pred = grid_clf.predict(X_test_scaled)
+
+#Afficher une matrice de confusion à partir de ces prédictions
+pd.crosstab(y_test, y_pred, rownames=['Classe réelle'], colnames=['Classe prédite'])
+
+--------------------------------------------------------------------------------
+Méthode des k plus proches voisins (K nearest neighbors (KNN)) reconnu pour la reconnaissance de formes, les algorithmes de compression, le marketing ciblé
+
+# Import des bibliothèques nécessaires
+from sklearn import neighbors
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+import pandas as pd
+import numpy as np
+
+#Importer le dictionnaire des données dans digits grâce à la fonction datasets.load_digits().
+digits = datasets.load_digits()
+
+#Sauvegarder dans un DataFrame X_digits les données contenues dans l'attribut data de digits.
+X_digits = pd.DataFrame(digits.data)
+#Sauvegarder dans y_digits les labels contenus dans l'attribut target de digits.
+y_digits = digits.target
+
+
+##Diviser les matrices X_digits et y_digits en un ensemble d'apprentissage de 80% (X_train, y_train) et un ensemble de test (X_test, y_test) de 20%.
+Rajouter l'argument random_state = 126 dans la fonction train_test_split pour la reproductibilité du choix de l'aléatoire.
+X_train, X_test, y_train, y_test = train_test_split(X_digits, y_digits, test_size=0.2, random_state=126)
+
+
+## 2. Apprentissage des données 
+
+#Créer un classifieur knn, avec k = 7 et la distance 'minkowski' (distance par défaut, avec p=2, distance euclidienne).
+knn = neighbors.KNeighborsClassifier(n_neighbors=7, metric='minkowski')
+
+# Ajuster le classifieur sur l'ensemble d'entraînement (X_train et y_train).
+knn.fit(X_train, y_train)
+
+## 3. Évaluation du modèle de classification 
+#Appliquer le modèle aux données de l'ensemble de test et stocker les prédictions obtenues dans la variable y_pred.
+y_pred = knn.predict(X_test)
+
+#Afficher une matrice de confusion pour comparer les classes réelles et prédites.
+pd.crosstab(y_test, y_pred, rownames=['Classe réelle'], colnames=['Classe prédite'])
+
+## Faire autre modèle pour voir quel est le plus performant
+#Créer un nouveau classifieur knn_m, avec k=5 et la distance 'manhattan'
+knn_m = neighbors.KNeighborsClassifier(n_neighbors=5, metric='manhattan')
+#Ajuster le nouveau classifieur sur l'ensemble d'entraînement (X_train et y_train).
+knn_m.fit(X_train, y_train)
+
+#Calculer le score de performance ('accuracy') pour les deux modèles.
+#Score du modèle utilisant la distance de Minkowski
+score_minkowski = knn.score(X_test, y_test)
+
+#Score du modèle utilisant la distance de Manhattan
+score_manhattan = knn_m.score(X_test, y_test)
+
+score_minkowski, score_manhattan
+
+##Si score proche alors il faut en faire la représentation graphique
+#Créer trois listes score_minko, score_man, score_cheb, dans lesquelles vous stockerez les scores de 3 modèles utilisant respectivement les matrices de Minkowski, Manhattan et Chebyshev, pour des valeurs de k allant de 1 à 40.
+score_minko = []
+score_man = []
+score_cheb = []
+
+for k in range(1, 41):
+    knn = neighbors.KNeighborsClassifier(n_neighbors=k)
+    knn.fit(X_train, y_train)
+    score_minko.append(knn.score(X_test, y_test))
+
+for k in range(1, 41):
+    knn = neighbors.KNeighborsClassifier(n_neighbors=k, metric='manhattan')
+    knn.fit(X_train, y_train)
+    score_man.append(knn.score(X_test, y_test))
+    
+for k in range(1, 41):
+    knn = neighbors.KNeighborsClassifier(n_neighbors=k, metric='chebyshev')
+    knn.fit(X_train, y_train)
+    score_cheb.append(knn.score(X_test, y_test))
+    
+#Afficher dans un graphique les listes créées en fonction de la valeur de k.
+# et Utiliser des couleurs et légendes différentes pour différencier les métriques.
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+plt.plot(range(1, 41), score_minko, color='blue', linestyle='dashed', lw=2, label='Minkowski')
+plt.plot(range(1, 41), score_man, color='orange', linestyle='dashed', lw=2, label='Manhattan')
+plt.plot(range(1, 41), score_cheb, color='red', linestyle='dashed', lw=2, label='Chebyshev')
+plt.title('Score - valeur de K')  
+plt.xlabel('Valeur de K')  
+plt.ylabel('Accuracy') 
+plt.legend(); #Vérifier si la variation des modèles est importante et la stabilité sur X, voir quand le modèle décroit pour savoir si quel X appliquer la bonne méthode
+
+--------------------------------------------------------------------------------
+Arbres de décision fonctionnent aussi bien avec des variables discrètes ou qualitatives (après dichotomisation sur scikit-learn) gérer à la fois des variables numériques et catégorielles, et s'avèrent facilement interprétables.
+
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+import pandas as pd
+
+Créer le Data Frame data contenant les différentes features et le vecteur target contenant la variable cible 'diagnosis'.
+data = bc_data.drop('diagnosis', axis=1) #s'il n'y a qu'une seule variable à exclure du df de Machine learning
+target = bc_data.diagnosis
+
+#2. Apprentissage des données
+
+#Séparer le jeu de données en ensembles d'apprentissage et de test, de sorte que l'ensemble de test représente 20% des données totales. Rajouter l'argument random_state=123 dans la fonction train_test_split pour la reproductibilité du choix de l'aléatoire.
+X_train, X_test, y_train, y_test = train_test_split(data, target, test_size=0.2, random_state=123)
+
+# Créer une instance DecisionTreeClassifier appelée dt_clf, avec le critère criterion='entropy' et l'argument max_depth=4 pour spécifier le nombre maximum de points de séparation possible avant d'atteindre un nœud "feuille". À nouveau, ajouter l'argument random_state=123 pour la reproductibilité des résultats.
+dt_clf = DecisionTreeClassifier(criterion ='entropy', max_depth=4, random_state=123)
+
+#Entraîner le classifieur sur l'ensemble d'entraînement.
+dt_clf.fit(X_train, y_train)
+
+#Appliquer le modèle aux données de l'ensemble de test et stocker les prédictions obtenues dans la variable y_pred.
+y_pred = dt_clf.predict(X_test)
+
+#Afficher une matrice de confusion pour comparer les classes réelles et prédites.
+pd.crosstab(y_test, y_pred, rownames=['Classe réelle'], colnames=['Classe prédite'])
+
+#Afficher les 8 variables les plus importantes pour dt_clf, ainsi que leurs importances respectives
+feats = {}
+for feature, importance in zip(data.columns, dt_clf.feature_importances_):
+    feats[feature] = importance 
+    
+importances = pd.DataFrame.from_dict(feats, orient='index').rename(columns={0: 'Importance'})
+importances.sort_values(by='Importance', ascending=False).head(8)
+
+##Deux mesures d'impureté peuvent être utilisées pour les arbres de décisions dans scikit-learn : l'Information Gain ou Entropy et l'index de Gini (plus de détails sur ces mesures ici).
+
+#Créer un classifieur dt_clf_gini, ayant pour paramètres : criterion='gini' , max_depth=4 et random_state=321.
+dt_clf_gini = DecisionTreeClassifier(criterion='gini', max_depth=4, random_state=321)
+
+#Entraîner le nouveau modèle sur l'ensemble d'entraînement (X_train et y_train).
+dt_clf_gini.fit(X_train, y_train)
+
+#Sauvegarder les prédictions du modèle sur X_test dans y_pred.
+y_pred = dt_clf_gini.predict(X_test)
+
+#Afficher la matrice de confusion correspondante.
+pd.crosstab(y_test, y_pred, rownames=['Classe réelle'], colnames=['Classe prédite'])
+
+#Afficher, comme pour le modèle précédent, les huit variables les plus importantes, ainsi que leurs importances respectives.
+feats = {}
+for feature, importance in zip(data.columns, dt_clf_gini.feature_importances_):
+    feats[feature] = importance 
+
+importances = pd.DataFrame.from_dict(feats, orient='index').rename(columns={0: 'Gini-importance'})
+
+#Affichage des 8 variables les plus importantes
+importances.sort_values(by='Gini-importance', ascending=False).head(8)
+
+
