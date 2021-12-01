@@ -309,3 +309,70 @@ importances = pd.DataFrame.from_dict(feats, orient='index').rename(columns={0: '
 importances.sort_values(by='Gini-importance', ascending=False).head(8)
 
 
+--------------------------------------------------------------------------------
+Le Boosting
+
+# Import des bibliothèques nécessaires
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import f1_score
+import pandas as pd
+import numpy as np
+
+#Charger le CSV
+df = pd.read_csv('letter-recognition.csv')
+df.info()
+
+#Séparer les features dans un DataFrame nommé data, et la variable cible dans target
+data = df.drop('letter', axis=1)
+target = df['letter']
+
+#Séparer les datasets en en un jeu d'apprentissage et un jeu de test. La taille du jeu de test doit correspondre à 30 % de la quantité totale des données disponibles.
+X_train, X_test, y_train, y_test = train_test_split(data, target, test_size=0.3)
+
+## Classification supervisée par arbre de décision
+# Construction du modèle de classification en utilisant les données d'entraînement
+dtc = DecisionTreeClassifier(max_depth=5) #Créer un modèle de classification dtc, ayant pour paramètre max_depth=5, en utilisant la méthode DecisionTreeClassifier.
+dtc.fit(X_train, y_train) #Entraîner l'algorithme sur l'ensemble d'entraînement (X_train et y_train).
+
+## Évaluation du premier modèle de classification
+#Calculer le taux de bonnes prédictions du modèle de classification sur l'ensemble de test en utilisant la méthode score
+dtc.score(X_test, y_test)
+
+#Effectuer les prédictions du modèle sur X_test, et afficher la matrice de confusion correspondante.
+y_pred = dtc.predict(X_test)
+pd.crosstab(y_test, y_pred, rownames=['Classe réelle'], colnames=['Classe prédite'])
+
+## Algorithme de Boosting
+
+# Création du classifier et construction du modèle sur les données d'entraînement
+ac = AdaBoostClassifier(base_estimator=dtc, n_estimators=400) Créer de nouveau un classifieur ac, ayant pour paramètres : base_estimator=dtc, et n_estimators=400, en utilisant la classe AdaBoostClassifier du package ensemble.
+ac.fit(X_train, y_train) #Entraîner l'algorithme sur l'ensemble (X_train, y_train).
+
+# Calcul de l'accuracy
+ac.score(X_test, y_test) #Calculer l'accuracy (taux de bonnes prédiction) du nouveau modèle de classification sur l'échantillon de test.
+
+#  Afficher la matrice de confusion de l'ensemble de test.
+y_pred = ac.predict(X_test)
+pd.crosstab(y_test, y_pred)
+
+
+--------------------------------------------------------------------------------
+Le Bagging
+
+# Création du classifier et construction du modèle sur les données d'entraînement
+from sklearn.ensemble import BaggingClassifier #Importer BaggingClassifier depuis sklearn.ensemble.
+bc = BaggingClassifier(n_estimators=1000, oob_score=True) #Créer un nouveau classifieur bc, ayant pour paramètres : n_estimators=1000, et oob_score=True pour calculer l'erreur Out Of Bag.
+bc.fit(X_train, y_train) #Entraîner l'algorithme sur l'ensemble d'entraînement (X_train et y_train). 
+bc.oob_score_ #Afficher l'erreur Out Of Bag du modèle grâce à l'attribut oob_score_.
+bc.oob_score_
+
+#Calculer l'accuracy (taux de bonnes prédiction) du nouveau modèle de classification sur l'échantillon de test.
+bc.score(X_test, y_test)
+
+#Afficher la matrice de confusion de l'ensemble de test.
+y_pred = bc.predict(X_test)
+pd.crosstab(y_test, y_pred)
+
+
