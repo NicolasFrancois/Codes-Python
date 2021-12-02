@@ -564,4 +564,41 @@ print(classification_report_imbalanced(y_test, y_pred))
 --------------------------------------------------------------------------------
 Autres méthodes
 
+## Pour cela, il suffit d'ajouter dans notre modèle SVM par exemple l'argument probability=True, et d'utiliser la fonction predict_proba afin de retourner les probabilités d'appartenir à chacune des classes, au lieu de la classe la plus probable.
+Si la probabilité d'appartenir à la classe 1 est supérieur au seuil défini, le client sera considéré comme un potentiel churner. Plus le seuil est bas, plus la précision augmentera, mais le rappel diminuera.
 
+# La cellule ci-dessous, affiche les résultats pour un seuil classique de 0.5.
+# Modifier ce seuil (threshold) pour observer les matrices de confusions obtenues
+svm = SVC(probability=True, gamma='scale') # 'probability= True' est nécessaire pour retourner les probas
+svm.fit(X_ru, y_ru)                        # mais ralentit l'entraînement
+
+threshold = 0.5 # Tester avec 0.4, 0.6, ...
+
+probs = svm.predict_proba(X_test)
+pred_class = (probs[:,1]>=threshold).astype('int')
+pd.crosstab(y_test, pred_class)
+
+## Une autre solution, plus facile, mais pas moins efficace dans certains cas est simplement d'utiliser le paramètre class_weight disponible dans la plupart des classes d'algorithmes de scikit-learn.
+Il permet de pénaliser les erreurs faites sur une classe par un nouveau poids. Plus le poids d'une classe est important, plus les erreurs sur cette classe sont pénalisées, et plus on lui donne de l'importance.
+Les poids doivent être indiqués sous forme de dictionnaire, par exemple : {0: 1, 1: 5}, pour donner 5 fois plus de poids aux erreurs faites sur la classe 1.
+L'argument 'balanced' permet d'associer à chaque classe un poids inversement proportionnel à sa fréquence.
+
+# Créer un modèle au choix en utilisant l'argument class_weight='balanced', et l'entraîner sur (X_train, y_train).
+# Afficher la matrice de confusion obtenu sur l'ensemble de test.
+svm = SVC(gamma='scale', class_weight='balanced')
+svm.fit(X_train, y_train)                         
+
+preds = svm.predict(X_test)
+
+pd.crosstab(y_test, preds)
+
+## Une dernière solution proposée par le sous-package imblearn.ensemble, est l'utilisation de classes contenant des modèles d'ensembles comme le Boosting ou Bagging et entraînés à chaque étape de l'algorithme sur un échantillon rééquilibré automatiquement entre les différentes classes.
+Ces implémentations de modèles permettent de se passer de méthode de ré-échantillonnage avant l'entraînement, et de les appliquer de manière automatique à chaque sélection de données par l'algorithme.
+
+# Créer et entrainer un modèle de la classe BalancedRandomForestClassifier, et afficher la matrice de confusion obtenue.
+from imblearn.ensemble import BalancedRandomForestClassifier
+
+bclf = BalancedRandomForestClassifier()
+bclf.fit(X_train, y_train) 
+y_pred = bclf.predict(X_test)
+pd.crosstab(y_test, y_pred)
