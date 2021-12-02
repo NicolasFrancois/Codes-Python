@@ -2607,4 +2607,5 @@ plt.pie(x = df.head(6).Turnover, labels = ['Janv', 'Fev', 'Mars', 'Avril', 'Mai'
            shadow = True) # on affiche une ombre
 plt.legend();
 
-
+## Convertir en type objet
+df.NumOfProducts = df['NumOfProducts'].astype('object')
