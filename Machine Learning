@@ -15,7 +15,9 @@ df = pd.read_csv('admissions.csv')
 df.head()
 
 #voir les infos d'un df
-df.info()
+print(data.info())
+data.describe() #Afficher une description statistique rapide des données quantitatives
+data.nunique().sort_values()
 
 #Supprimer les valeurs nulles d'un df
 df = df.dropna()
